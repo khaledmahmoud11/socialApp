@@ -1,6 +1,6 @@
 import {Button, Input, Spinner} from "@heroui/react";
 import { CiSearch } from "react-icons/ci";
-import SuggestionsSkeleton from '../../Component/Skeletons/suggestionsSkeleton';
+import SuggestionsSkeleton from '../../Component/Skeletons/SuggestionsSkeleton';
 import { IoPersonAdd } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { followUser } from "../../services/Suggestions";
@@ -41,7 +41,7 @@ export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
                     <Input 
                         type="search"
                         placeholder='Search Friends'
-                        className='border-1 border-gray-300 rounded-xl my-3'
+                        className='border border-gray-300 rounded-xl my-3'
                         startContent={<CiSearch />}
                         onChange={(e)=>setsearchInput(e.target.value)}
         
@@ -51,7 +51,7 @@ export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
                             {suggestions.filter((suggestion)=>suggestion.name.toLowerCase().includes(searchInput.toLowerCase())).map((suggestion)=>{
                                 return (                     
                                 <div className="suggest" key={suggestion._id}>
-                                    <div className='border-1 border-gray-300 rounded-xl p-3 mb-3'>
+                                    <div className='border border-gray-300 rounded-xl p-3 mb-3'>
                                         <div className='flex justify-between items-center mb-3'>
                                             <div className='flex items-center gap-2 '>
                                                 <img src={suggestion.photo} alt="" className='w-10 h-10 rounded-full' />
