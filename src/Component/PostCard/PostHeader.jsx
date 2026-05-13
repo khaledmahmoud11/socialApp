@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { GoBookmarkSlash } from "react-icons/go";
 
 
-export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId  , setIsEditing ,bookmarked ,setPosts   }) {
+export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId  , setIsEditing ,bookmarked ,setPosts,activeTab   }) {
     let {profileData}=useContext(AuthContext);
 
     const dialogRef = useRef();
@@ -43,11 +43,15 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
             }else{
                 toast.success("Post unsaved successfully")
             }
-            setPosts(prevPosts => 
-                prevPosts.map(post => 
-                    post._id === postId ? { ...post, bookmarked: !bookmarked } : post
-                )
-            );
+            const isNowBookmarked = response.data.data.bookmarked;
+            setPosts(prevPosts => {
+                if (activeTab === "saved" && !isNowBookmarked) {
+                    return prevPosts.filter(post => post._id !== postId);
+                }
+                return prevPosts.map(post => 
+                    post._id === postId ? { ...post, bookmarked: isNowBookmarked } : post
+                );
+            });
         } catch (error) {
             console.log(error)
         }finally{

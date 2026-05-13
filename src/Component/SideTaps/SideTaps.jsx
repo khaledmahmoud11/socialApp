@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../Context/AuthContext';
 import { LuNewspaper } from "react-icons/lu";
 import { LuSparkles } from "react-icons/lu";
 import { LuEarth } from "react-icons/lu";
 import { CiBookmark } from "react-icons/ci";
-export default function SideTaps({fetchAllPosts,fetchHomePosts,fetchUserPosts,setCallbackFunction}) {
+export default function SideTaps({activeTab, setActiveTab ,fetchAllPosts,fetchHomePosts,fetchUserPosts,fetchSavePosts,setCallbackFunction}) {
 
     let {profileData}=useContext(AuthContext)
 
-    const [activeTab, setActiveTab] = useState("feed");
+    
     
 
 
@@ -46,7 +46,10 @@ export default function SideTaps({fetchAllPosts,fetchHomePosts,fetchUserPosts,se
             key: "saved",
             label: "Saved",
             icon: <CiBookmark />,
-            onClick: () => {},
+            onClick: () => {
+                setCallbackFunction(() => fetchSavePosts);
+                fetchSavePosts();
+            },
         },
         ];
     return (

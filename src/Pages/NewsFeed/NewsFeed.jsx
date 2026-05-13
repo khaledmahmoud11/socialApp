@@ -19,6 +19,9 @@ export default function NewsFeed() {
   const [callbackFunction, setCallbackFunction] = useState(fetchAllPosts);
   const [allPostLoading, setAllPostLoading] = useState(false)
 
+
+
+  const [activeTab, setActiveTab] = useState("feed");
   async function fetchAllPosts(){
     try {
       setAllPostLoading(true);
@@ -47,6 +50,18 @@ export default function NewsFeed() {
       let response = await getMyPosts(userId);
       setPosts(response.data.data.posts);
       console.log(response.data.data.posts,"11111111111111111111111111111111111111111111")
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setAllPostLoading(false);
+    }
+  }
+  async function fetchSavePosts(){
+    try {
+      setAllPostLoading(true);
+      const response = await getAllPosts();
+      const savePosts = response.data.data.posts.filter(post => post.bookmarked === true);
+      setPosts(savePosts);    
     } catch (error) {
       console.log(error)
     }finally{
@@ -115,14 +130,14 @@ export default function NewsFeed() {
             <div className='left-side col-span-4 order-1 lg:order-1 lg:col-span-1 lg:sticky lg:top-17.5 self-start  '>
               <div className='p-2 border-2 border-gray-200 shadow-md rounded-xl flex-col gap-2'>
                 
-                <SideTaps fetchAllPosts={fetchAllPosts} fetchHomePosts={fetchHomePosts} fetchUserPosts={fetchUserPosts} setPosts={setPosts} setCallbackFunction={setCallbackFunction} />
+                <SideTaps activeTab={activeTab} setActiveTab={setActiveTab} fetchAllPosts={fetchAllPosts} fetchHomePosts={fetchHomePosts} fetchUserPosts={fetchUserPosts} fetchSavePosts={fetchSavePosts} setPosts={setPosts} setCallbackFunction={setCallbackFunction} />
               
               </div>
             </div>
 
               <div className='col-span-4 order-3 lg:order-2 lg:col-span-2 space-y-4'>
                 <CreatePost fetchAllPosts={fetchAllPosts} setPosts={setPosts} />
-                {allPostLoading ?  <PostSkeleton/> : posts.length===0 ? <p className='text-center text-gray-500 py-10'>No posts yet. Be the first one to publish.</p>  : posts.map((post)=> <Post callBack={callbackFunction} key={post._id} post={post} setPosts={setPosts} />)  }
+                {allPostLoading ?  <PostSkeleton/> : posts.length===0 ? <p className='text-center text-gray-500 py-10'>No posts yet. Be the first one to publish.</p>  : posts.map((post)=> <Post callBack={callbackFunction} key={post._id} post={post} setPosts={setPosts} activeTab={activeTab} />)  }
             </div>
             
             <div className='right-side col-span-4 order-2 lg:order-3 lg:col-span-1 lg:sticky lg:top-17.5 self-start'>
