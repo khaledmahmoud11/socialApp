@@ -1,0 +1,359 @@
+import React, { useContext, useRef } from 'react'
+import { useState } from 'react';
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Input, Spinner} from "@heroui/react";
+import { BsThreeDots } from 'react-icons/bs';
+import { AuthContext } from '../../Context/AuthContext';
+import { createReply, DeleteComment, editComment, getAllReplies } from '../../services/CommentServices';
+import { toast } from 'react-toastify';
+import { FaImage } from "react-icons/fa6";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
+import { IoSend } from "react-icons/io5";
+import { FaHourglassEnd } from "react-icons/fa";
+import { IoCloseSharp } from "react-icons/io5";
+
+export default function PostFooter({ comments , setComments , postId , userId , loadingComment  }) {
+    let {profileData}=useContext(AuthContext)
+    const [showMoreComments, setShowMoreComments] = useState(2)
+    const [editCommentId, setEditCommentId] = useState(null)
+    const [newContent, setNewContent] = useState("")
+    const [laodingChange, setLaodingChange] = useState(false)
+
+
+    const [replayStatement, setreplayStatement] = useState(null);
+    const [replyBody, setReplyBody] = useState("")
+    
+
+    
+
+    async function handleDeleteComment( postId , commentId ){
+        try {
+            const response = await DeleteComment( postId , commentId);
+            setComments(prev => prev.filter(c => c._id !== commentId));
+            setReplies(prev => prev.filter(c => c._id !== commentId));
+
+            toast.success(response.data.message)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function changeInput(comment){
+        setEditCommentId(comment._id);
+        setNewContent(comment.content)
+        // console.log("hi")
+    }
+    function handleCancelEditing(){
+        setEditCommentId(null)
+    }
+
+
+    async function handleEditComment( postId , commentId){
+        try{
+            setLaodingChange(true)
+            const formData = new FormData();
+            if(newContent){
+                formData.append("content",newContent)
+            }
+            const response = await editComment( postId , commentId  , formData )
+            setComments(prev => prev.map(c => c._id === commentId ? {...c, content: newContent} : c));
+            console.log(response,"after editing 466666666666666666666666666666666666666")
+            setEditCommentId(null)
+            setReplies(prev =>
+                prev.map(reply =>
+                    reply._id === commentId ? response.data.data.comment : reply
+                )
+            );
+        }catch(error){
+            console.log(error)
+        }finally{
+            setLaodingChange(false)
+        }
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        const minutes = Math.floor(diffInSeconds / 60);
+        const hours = Math.floor(diffInSeconds / 3600);
+        const days = Math.floor(diffInSeconds / 86400);
+        const weeks = Math.floor(diffInSeconds / 604800);
+        const months = Math.floor(diffInSeconds / 2592000);
+        const years = Math.floor(diffInSeconds / 31536000);
+
+        if (diffInSeconds < 60) {
+            return "Just now";
+        } else if (minutes < 60) {
+            return `${minutes}m`;
+        } else if (hours < 24) {
+            return `${hours}h`;
+        } else if (days < 7) {
+            return `${days}d`;
+        } else if (weeks < 4) {
+            return `${weeks}w`;
+        } else if (months < 12) {
+            return `${months}mo`;
+        } else {
+            return `${years}y`;
+        }
+    }
+
+
+    const photoComment = useRef();
+    function clickPhotoIcon(){
+        photoComment.current.click();
+    }
+
+    const [displayPhoto, setDisplayPhoto] = useState("")
+    const [sendingPhoto, setSendingPhoto] = useState("")
+    function selectPhotoComment(){
+        setSendingPhoto(photoComment.current.files[0])
+        setDisplayPhoto(URL.createObjectURL(photoComment.current.files[0]))
+    }
+
+    function deleteDisplayPhoto(){
+        setSendingPhoto("")
+        setDisplayPhoto("")
+    }
+
+    const [replyloading, setReplyloading] = useState(false)
+
+
+    const [replies, setReplies] = useState([])
+    async function fetchAllReplies(postId,commentID){
+        try{
+        setReplyloading(true)
+        const response = await getAllReplies(postId,commentID);
+        console.log(response,"replies for comment");
+        setReplies(response.data.data.replies)
+
+        }catch(error){
+        console.log(error)
+        }finally{
+        setReplyloading(false)
+        }
+    }
+    async function handleSubmitReply(postId,commentID){
+
+        try{
+            setReplyloading(true)
+            const formData = new FormData();
+            if(replyBody){
+                formData.append("content",replyBody)
+            }
+            if(sendingPhoto){
+                formData.append("image",sendingPhoto)
+            }
+            const response = await createReply(postId,commentID,formData)
+            console.log(response)
+            setReplyBody("")
+            setDisplayPhoto("")
+            setSendingPhoto("")
+            fetchAllReplies(postId,commentID)
+        }catch(error){
+            console.log(error)
+        }finally{
+            setReplyloading(false)
+        }
+
+    }
+
+
+    return (
+        <>  
+
+            <div className="pstFooter p-2">
+                {comments && !loadingComment &&
+                    <>
+                        {comments.map((comment)=>(
+                            <div key={comment._id} className='py-2 comment' >
+                                <div className='flex gap-3 '>
+                                    <img src={comment.commentCreator.photo} alt="" className='w-10 h-10 rounded-full' />
+                                    <div className='px-3 py-2 w-full'>
+
+                                        <div className="flex gap-3">
+
+                                            <div className='px-3 rounded-lg  py-2 bg-gray-200 shadow  min-w-28.5 max-w-fit'>
+                                                <h3 className='text-sm font-bold'>{comment.commentCreator.name}</h3>
+                                                {editCommentId === comment._id ? <>
+                                                    <div className='flex items-center gap-2'>
+                                                        <Input className='border-2 border-gray-300 rounded-xl' type="text" value={newContent} onChange={(e)=>setNewContent(e.target.value)} />
+                                                        <Button isLoading={laodingChange} onClick={()=>handleEditComment(postId,comment._id)} className='bg-blue-600 text-white font-bold'>save</Button>
+                                                        <Button onClick={()=>handleCancelEditing()} >cancel</Button>
+                                                    </div>
+                                                
+                                                    </>   
+                                                : 
+                                                    <div>
+                                                        { comment.content && <p className='text-sm text-gray-700' >{comment.content}</p>}
+                                                        { comment.image && <img src={comment.image} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />}
+                                                
+                                                    </div>   
+                                                }
+                                            </div>
+                                            {(comment.commentCreator._id === profileData.id || userId === profileData.id) && 
+                                                <>
+                                                    <div>
+                                                        <Dropdown >
+                                                        <DropdownTrigger className='bg-transparent hover:bg-gray-300 transition-all duration-200'>
+                                                            <Button > <BsThreeDots /> </Button>
+                                                        </DropdownTrigger>
+                                                        <DropdownMenu aria-label="Static Actions">
+                                                            { comment.commentCreator._id === profileData.id && <DropdownItem key="edit" className='cursors pointer' onClick={()=>changeInput(comment)} >Edit Comment</DropdownItem>}
+                                                            <DropdownItem key="delete" className="text-danger cursor-pointer" color="danger" onClick={()=>handleDeleteComment( postId , comment._id)} >
+                                                                Delete Comment
+                                                            </DropdownItem>
+                                                        </DropdownMenu>
+                                                    </Dropdown>
+                                                    </div>
+                                                </>
+                                            }
+
+                                        </div>
+                                        
+                                        <div className='flex justify-between items-center w-full'>
+                                            <div className="flex items-center gap-3 my-3">
+                                                <p className='text-gray-400 text-sm '> {formatDate(comment.createdAt)} </p>
+                                                <button className='hover:underline hover:text-blue-400 transition-all duration-200 cursor-pointer'>like</button>
+                                                {replayStatement === comment._id ?
+                                                    <button onClick={()=>setreplayStatement(null)} className='hover:underline cursor-pointer text-blue-600'>hide Replies</button>
+                                                :
+                                                    <button onClick={() => {
+                                                        setreplayStatement(comment._id);
+                                                        fetchAllReplies(postId, comment._id);
+                                                    }} className='hover:underline cursor-pointer '>
+                                                        reply ({comment.repliesCount ? comment.repliesCount : 0})
+                                                        </button>
+                                                }
+                                            </div>
+                                            
+
+                                        </div>
+                                        {replayStatement === comment._id && <>
+
+                                            {replyloading ? 
+
+                                                <div className="flex gap-2 text-gray-500 my-2">
+                                                    <Spinner color='text-gray-500' size='sm'/>
+                                                    please wait for replies
+                                                </div>
+                                            
+                                                :
+                                                replies.length===0 ? <p className='text-xs text-slate-500 my-2'> No Replies Yet For This Comment</p> :
+                                                <>
+                                                    {replies.map((reply)=>(
+                                                        <div key={reply._id} className='py-2 comment' >
+                                                            <div className='flex gap-3 '>
+                                                                <img src={reply.commentCreator.photo} alt="" className='w-7 h-7 rounded-full' />
+                                                                <div className='px-3 py-2 w-full'>
+
+                                                                    <div className="flex gap-3">
+
+                                                                        <div className='px-3 rounded-lg  py-2 bg-gray-200 shadow  min-w-28.5 max-w-fit'>
+                                                                            <h3 className='text-sm font-bold'>{reply.commentCreator.name}</h3>
+                                                                            {editCommentId === reply._id ? <>
+                                                                                <div className='flex items-center gap-2'>
+                                                                                    <Input className='border-2 border-gray-300 rounded-xl' type="text" value={newContent} onChange={(e)=>setNewContent(e.target.value)} />
+                                                                                    <Button isLoading={laodingChange} onClick={()=>handleEditComment(postId,reply._id)} className='bg-blue-600 text-white font-bold'>save</Button>
+                                                                                    <Button onClick={()=>handleCancelEditing()} >cancel</Button>
+                                                                                </div>
+                                                                            
+                                                                                </>   
+                                                                            : 
+                                                                                <div>
+                                                                                    { reply.content && <p className='text-sm text-gray-700' >{reply.content}</p>}
+                                                                                    { reply.image && <img src={reply.image} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />}
+                                                                            
+                                                                                </div>   
+                                                                            }
+                                                                        </div>
+                                                                        {(reply.commentCreator._id === profileData.id || userId === profileData.id) && 
+                                                                            <>
+                                                                                <div>
+                                                                                    <Dropdown >
+                                                                                    <DropdownTrigger className='bg-transparent hover:bg-gray-300 transition-all duration-200'>
+                                                                                        <Button > <BsThreeDots /> </Button>
+                                                                                    </DropdownTrigger>
+                                                                                    <DropdownMenu aria-label="Static Actions">
+                                                                                        { reply.commentCreator._id === profileData.id && <DropdownItem key="edit" className='cursors pointer' onClick={()=>changeInput(reply)} >Edit Comment</DropdownItem>}
+                                                                                        <DropdownItem key="delete" className="text-danger cursor-pointer" color="danger" onClick={()=>handleDeleteComment( postId , reply._id)} >
+                                                                                            Delete Comment
+                                                                                        </DropdownItem>
+                                                                                    </DropdownMenu>
+                                                                                </Dropdown>
+                                                                                </div>
+                                                                            </>
+                                                                        }
+
+                                                                    </div>
+                                                                    <div className='flex justify-between items-center w-full'>
+                                                                        <div className="flex items-center gap-3 my-3">
+                                                                            <p className='text-gray-400 text-sm '> {formatDate(reply.createdAt)} </p>
+                                                                            <button className='hover:underline hover:text-blue-400 transition-all duration-200 cursor-pointer'>like</button>                                                                    
+                                                                        </div>
+                                                                    </div>                                                     
+                                                                </div>
+                                                            </div>                                                        
+                                                        </div>
+                                                ))}
+                                                </>
+                                                
+                                            }
+                                            <div>
+                                                <div className='flex  gap-2'>
+                                                    <img src={profileData.photo} alt="" className='w-10 h-10 rounded-full' />
+                                                    <div className=' w-full bg-gray-300 p-4 border-2 border-transparent focus-within:border-1 focus-within:bg-white focus-within:border-gray-300 rounded-xl'>
+                                                        <Input
+                                                            placeholder='Write a Comment '
+                                                            className='mb-3 w-full '
+                                                            onChange={(e)=>setReplyBody(e.target.value)}
+                                                            value={replyBody}
+                                                        />
+                                                        <div className='flex justify-between items-center'>
+                                                            <div className='flex items-center gap-3'>
+                                                                <span onClick={()=>clickPhotoIcon()} className='cursor-pointer' > <FaImage /> </span>
+                                                                <Input 
+                                                                    type='file' 
+                                                                    ref={photoComment} 
+                                                                    className='hidden'
+                                                                    onInput={()=>selectPhotoComment()}
+                                                                />
+                                                                <span> <MdOutlineEmojiEmotions /> </span>
+                                                            </div>
+                                                            <div>
+                                                                <button disabled={!replyBody && !sendingPhoto} onClick={()=>handleSubmitReply(postId, comment._id)} className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-blue-300 ${!replyloading ? 'text-blue-600 bg-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}> {!replyloading ? <IoSend /> :    <Spinner size='sm' />  }  </button>
+                                                            </div>
+                                                                    
+                                                        </div>
+                                                        <div>
+                                                            {displayPhoto  &&  
+                                                                <div className='relative'>
+                                                                    <img src={displayPhoto} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />
+                                                                    <span onClick={()=>deleteDisplayPhoto()} className='bg-gray-900 rounded-full p-2 text-white absolute top-2.5 right-2.5 cursor-pointer'> <IoCloseSharp /></span>
+                                                                </div> 
+                                                            }
+                                                        </div>   
+                                                    </div>
+
+                                                </div>
+                                            </div>                            
+                                        </>}                               
+                                    </div>
+                                </div>                        
+                            </div>
+                        ))}
+                                                
+                    </> 
+                }
+
+
+
+            </div>
+            {comments.length > showMoreComments && <>
+                <button onClick={()=> setShowMoreComments(showMoreComments +2)} className='text-blue-600 cursor-pointer p-3 hover:underline'>view more comments</button>
+            </>}
+        </>
+    )
+}
