@@ -1,10 +1,13 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { defualtAvatar, formatPostDate } from '../../Liberary/HelperFunctions/HelperFunctions'
 import { BsThreeDots } from 'react-icons/bs'
 import { AuthContext } from '../../Context/AuthContext'
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@heroui/react";
-import { DeletePost } from '../../services/PostServicies';
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Spinner} from "@heroui/react";
+import { BookmarkPost, DeletePost } from '../../services/PostServicies';
 import { Link } from 'react-router';
+import { FaPencilAlt, FaTrash  } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa";
+import { toast } from 'react-toastify';
 
 
 export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId , callBack , setIsEditing   }) {
@@ -25,6 +28,24 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
 
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    const [loadingSave, setLoadingSave] = useState(false)
+    async function fetchBookmarkPost(postId){
+        try {
+            setLoadingSave(true);
+            const response = await BookmarkPost(postId);
+            console.log(response,"after save post777777777777777777777777777777777777777")
+            if(response.data.data.bookmarked){
+                toast.success("Post saved successfully")
+            }else{
+                toast.success("Post unsaved successfully")
+            }
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setLoadingSave(false);
         }
     }
     
@@ -83,19 +104,32 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
                                 </div>
                             </div>
                         </div>
-                        {userId === profileData?.id && <>
+                        
                             <Dropdown>
                                 <DropdownTrigger>
                                     <Button variant="bordered"> <BsThreeDots /> </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Static Actions">
-                                    <DropdownItem key="edit" className='cursors pointer' onClick={()=> setIsEditing(true) } >Edit Post</DropdownItem>
-                                    <DropdownItem key="delete" className="text-danger cursor-pointer" onClick={openDialog} color="danger" >
-                                        <button command="show-modal" commandfor={`dialog-${id}`} >Delete post</button>
+                                    <DropdownItem onClick={()=>fetchBookmarkPost(id)} key="edit" className='cursors pointer' >
+                                        <div className="flex items-center gap-2">
+                                            {loadingSave ? <Spinner size='sm' /> : <FaBookmark /> }  Save Post
+                                        </div>
                                     </DropdownItem>
+                                    {userId === profileData?.id && <>
+                                        <DropdownItem key="edit" className='cursors pointer' onClick={()=> setIsEditing(true) } >
+                                            <div className="flex items-center gap-2">
+                                                <FaPencilAlt /> Edit Post
+                                            </div>
+                                        </DropdownItem>
+                                        <DropdownItem key="delete" className="text-danger cursor-pointer" onClick={openDialog} color="danger" >
+                                            <button command="show-modal" commandfor={`dialog-${id}`} className='flex items-center gap-2' >
+                                                <FaTrash /> Delete Post
+                                            </button>
+                                        </DropdownItem>
+                                    </>  }
                                 </DropdownMenu>
                                 </Dropdown>
-                        </>  }
+                        
                         
                     </div>
                 </div>

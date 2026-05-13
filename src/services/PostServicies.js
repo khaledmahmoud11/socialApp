@@ -108,3 +108,16 @@ export async function sharePost(postID,formData) {
 
     return data;
 }
+
+export async function BookmarkPost(postId) {
+
+    const token = Cookies.get('userToken');
+    
+    let data = await axios.put(`${base_url}/posts/${postId}/bookmark` , {} , {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    return data;
+}
