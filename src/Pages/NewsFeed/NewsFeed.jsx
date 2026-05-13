@@ -17,22 +17,40 @@ export default function NewsFeed() {
   const [suggestions, setsuggestions] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
   const [callbackFunction, setCallbackFunction] = useState(fetchAllPosts);
-
+  const [allPostLoading, setAllPostLoading] = useState(false)
 
   async function fetchAllPosts(){
-    let response = await getAllPosts();
-    console.log(response.data.data.posts,"ya mosheeel getAllPosts");
-    setPosts(response.data.data.posts);
+    try {
+      setAllPostLoading(true);
+      let response = await getAllPosts();
+      setPosts(response.data.data.posts);
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setAllPostLoading(false);
+    }
   }
   async function fetchHomePosts(){
-    let response = await getHomeFeedPosts();
-    console.log(response.data.data.posts,"ya mosheeel fetchHomePosts");
-    setPosts(response.data.data.posts);
+    try {
+      setAllPostLoading(true);
+      let response = await getHomeFeedPosts();
+      setPosts(response.data.data.posts);
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setAllPostLoading(false);
+    }
   }
   async function fetchUserPosts(userId){
-    let response = await getMyPosts(userId);
-    console.log(response.data.data.posts,"ya mosheeel fetchUserPosts");
-    setPosts(response.data.data.posts);
+    try {
+      setAllPostLoading(true);
+      let response = await getMyPosts(userId);
+      setPosts(response.data.data.posts);
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setAllPostLoading(false);
+    }
   }
 
 
@@ -103,7 +121,7 @@ export default function NewsFeed() {
 
               <div className='col-span-4 order-3 lg:order-2 lg:col-span-2 space-y-4'>
                 <CreatePost fetchAllPosts={fetchAllPosts} />
-                {posts.length === 0 ?  <PostSkeleton/> : posts.map((post)=> <Post callBack={callbackFunction} key={post._id} post={post} />)  }
+                {allPostLoading ?  <PostSkeleton/> : posts.length===0 ? <p className='text-center text-gray-500 py-10'>No posts yet. Be the first one to publish.</p>  : posts.map((post)=> <Post callBack={callbackFunction} key={post._id} post={post} />)  }
             </div>
             
             <div className='right-side col-span-4 order-2 lg:order-3 lg:col-span-1 lg:sticky lg:top-17.5 self-start'>
