@@ -8,9 +8,10 @@ import { Link } from 'react-router';
 import { FaPencilAlt, FaTrash  } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import { toast } from 'react-toastify';
+import { GoBookmarkSlash } from "react-icons/go";
 
 
-export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId , callBack , setIsEditing   }) {
+export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId  , setIsEditing ,bookmarked ,setPosts   }) {
     let {profileData}=useContext(AuthContext);
 
     const dialogRef = useRef();
@@ -20,11 +21,11 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
     
     async function fetchDeletePost(id){
         try {
-            await DeletePost(id);
-
+            const response = await DeletePost(id);
+            toast.success(response.data.message)
             dialogRef.current.close(); 
 
-            await callBack?.();
+            setPosts(prevPosts => prevPosts.filter(post => post._id !== id));
 
         } catch (error) {
             console.log(error)
@@ -42,6 +43,11 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
             }else{
                 toast.success("Post unsaved successfully")
             }
+            setPosts(prevPosts => 
+                prevPosts.map(post => 
+                    post._id === postId ? { ...post, bookmarked: !bookmarked } : post
+                )
+            );
         } catch (error) {
             console.log(error)
         }finally{
@@ -112,7 +118,7 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
                                 <DropdownMenu aria-label="Static Actions">
                                     <DropdownItem onClick={()=>fetchBookmarkPost(id)} key="edit" className='cursors pointer' >
                                         <div className="flex items-center gap-2">
-                                            {loadingSave ? <Spinner size='sm' /> : <FaBookmark /> }  Save Post
+                                            {loadingSave ? <Spinner size='sm' /> : bookmarked ? <GoBookmarkSlash /> : <FaBookmark /> }  {bookmarked ? "Unsave" : "Save"}   Post
                                         </div>
                                     </DropdownItem>
                                     {userId === profileData?.id && <>

@@ -46,6 +46,7 @@ export default function NewsFeed() {
       setAllPostLoading(true);
       let response = await getMyPosts(userId);
       setPosts(response.data.data.posts);
+      console.log(response.data.data.posts,"11111111111111111111111111111111111111111111")
     } catch (error) {
       console.log(error)
     }finally{
@@ -120,8 +121,8 @@ export default function NewsFeed() {
             </div>
 
               <div className='col-span-4 order-3 lg:order-2 lg:col-span-2 space-y-4'>
-                <CreatePost fetchAllPosts={fetchAllPosts} />
-                {allPostLoading ?  <PostSkeleton/> : posts.length===0 ? <p className='text-center text-gray-500 py-10'>No posts yet. Be the first one to publish.</p>  : posts.map((post)=> <Post callBack={callbackFunction} key={post._id} post={post} />)  }
+                <CreatePost fetchAllPosts={fetchAllPosts} setPosts={setPosts} />
+                {allPostLoading ?  <PostSkeleton/> : posts.length===0 ? <p className='text-center text-gray-500 py-10'>No posts yet. Be the first one to publish.</p>  : posts.map((post)=> <Post callBack={callbackFunction} key={post._id} post={post} setPosts={setPosts} />)  }
             </div>
             
             <div className='right-side col-span-4 order-2 lg:order-3 lg:col-span-1 lg:sticky lg:top-17.5 self-start'>

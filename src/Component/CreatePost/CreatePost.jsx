@@ -9,8 +9,9 @@ import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { createPost } from '../../services/PostServicies';
 import { AuthContext } from '../../Context/AuthContext';
+import { toast } from 'react-toastify';
 
-export default function CreatePost({fetchAllPosts}) {
+export default function CreatePost({setPosts}) {
     let {profileData}=useContext(AuthContext)
 
   const inputPhoto = useRef();
@@ -44,13 +45,16 @@ export default function CreatePost({fetchAllPosts}) {
           formData.append("image", sendingImage);
       }
       const response = await createPost(formData);
-      console.log(response,"response for post ");
+      const newPost = response.data.data.post;
+      console.log(response,"response for creating post 8888888888888888888888888888888");
       setDisplayImage("");
       setSendingImage("");
       setPostContent("");
       inputPhoto.current.value = "";
       inputbody.current.value = ""
-      fetchAllPosts();
+      toast.success(response.data.data.message)
+      setPosts(prevPosts => [newPost, ...prevPosts]);
+
     } catch (error) {
       console.log(error)
     }finally{
