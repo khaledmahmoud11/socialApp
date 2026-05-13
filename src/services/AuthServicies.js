@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Cookies from 'js-cookie';
 const base_url = import.meta.env.VITE_BASE_URL ;
 export async function userRegister(body) {
     let data = await axios.post(`${base_url}/users/signup`, body, {
@@ -22,7 +22,7 @@ export async function userLogin(body) {
 }
 
 export async function updatePassword(body) {
-    const token = localStorage.getItem("userToken")
+    const token = Cookies.get('userToken');
     let data = await axios.patch(`${base_url}/users/change-password`, body, {
         headers: {              
             "Content-Type": "application/json",

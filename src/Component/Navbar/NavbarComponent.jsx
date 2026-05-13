@@ -18,7 +18,7 @@ import { CiUser } from "react-icons/ci";
 import { FiMessageCircle } from "react-icons/fi";
 import { FaGear } from "react-icons/fa6";
 import { FaBars } from "react-icons/fa";
-
+import Cookies from 'js-cookie';
 
 import logo from "../../assets/app_photos/1771039394530-c4f38738-a94d-4d75-93fa-02ec2d0341f4-route-logo.jfif"
 import { NavLink, useNavigate } from 'react-router';
@@ -35,7 +35,7 @@ export default function NavbarComponent() {
     ];
     
   function handleLogOut(){
-    localStorage.removeItem("userToken");
+    Cookies.remove('user_token');
     navigate("/login");
     setToken(null);
   }

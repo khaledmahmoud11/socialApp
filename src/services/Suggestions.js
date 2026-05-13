@@ -1,11 +1,12 @@
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 const base_url = import.meta.env.VITE_BASE_URL ;
 
 export async function getFollowSuggestions() {
 
-    let token = localStorage.getItem("userToken")
-    console.log(token,"check token")
+    const token = Cookies.get('userToken');
+    
     let data = await axios.get(`${base_url}/users/suggestions?limit=10`, {
         headers: {
             "Content-Type": "application/json",
@@ -17,7 +18,7 @@ export async function getFollowSuggestions() {
 }
 
 export async function followUser(userId) {
-    const token = localStorage.getItem("userToken");
+    const token = Cookies.get('userToken');
 
     const response = await axios.put(
         `${base_url}/users/${userId}/follow`,
