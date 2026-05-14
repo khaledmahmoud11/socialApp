@@ -144,11 +144,15 @@ export default function PostFooter({ comments , setComments , postId , userId , 
                 formData.append("image",sendingPhoto)
             }
             const response = await createReply(postId,commentID,formData)
+            console.log(response,"afteradd reply")
             toast.success(response.data.message)
             setReplyBody("")
             setDisplayPhoto("")
             setSendingPhoto("")
-            fetchAllReplies(postId,commentID)
+            setReplies(prev => [
+                response.data.data.reply,
+                ...prev
+            ]);
         }catch(error){
             console.log(error)
         }finally{
