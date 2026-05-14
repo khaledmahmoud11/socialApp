@@ -174,7 +174,7 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
           </>
         </div> }
         {isShare && <>
-          <div className=' bg-gray-200 border border-gray-300 rounded-xl w-full p-3'>
+          <div className=' bg-gray-100 border border-gray-300 rounded-xl w-full p-3 my-3 '>
               <div className="flex items-center justify-between ">
                 <div className='flex items-center gap-2'>
                   <img src={sharedPost.user.photo} alt="" className='w-10 h-10 rounded-full' />

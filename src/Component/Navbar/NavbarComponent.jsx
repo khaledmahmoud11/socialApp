@@ -41,7 +41,7 @@ export default function NavbarComponent() {
   }
   return (
     <>
-        <Navbar maxWidth='xl'>
+        <Navbar maxWidth='xl' className='border-b border-gray-300'>
         <NavbarBrand className='gap-3'>
           <img src={logo} alt="social_app_logo" width={40} className='rounded-2xl'/>
           <p className="font-bold text-inherit text-xl hidden md:flex">Route Posts</p>

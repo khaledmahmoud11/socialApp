@@ -64,7 +64,7 @@ export default function SideTaps({activeTab, setActiveTab ,fetchAllPosts,fetchHo
                     className={`flex mb-1 gap-2 items-center font-bold p-3 rounded-xl w-full cursor-pointer
                         ${
                             activeTab === tab.key
-                            ? "bg-blue-300 text-blue-600"
+                            ? "bg-blue-100 text-blue-500"
                             : "text-gray-700"
                         }
                         hover:bg-gray-200

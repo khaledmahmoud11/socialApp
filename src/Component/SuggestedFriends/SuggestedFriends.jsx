@@ -28,7 +28,7 @@ export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
     
     return (
         <>
-            <div className='p-4 border-2 border-gray-200 shadow-md rounded-xl flex-col gap-2'>   
+            <div className='p-4 border-1 border-gray-100 shadow-md rounded-xl flex-col gap-2'>   
                 <div className='flex justify-between items-center'>
                     <p className='flex items-center gap-2 '>
                         <span> <CiUser className='text-blue-600' /> </span>
@@ -61,7 +61,7 @@ export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
                                             </div>
                                             <Button
                                                 onClick={() => handleFollowUser(suggestion._id)}
-                                                className={`${profileData.following?.includes(suggestion._id) ? "bg-green-200 hover:bg-green-100 text-green-600  "   : "bg-blue-200 hover:bg-blue-100 text-blue-600 " }   cursor-pointer text-sm font-bold rounded-xl p-2 flex items-center gap-2`}
+                                                className={`${profileData.following?.includes(suggestion._id) ? "bg-green-50 hover:bg-green-100 text-green-600  "   : "bg-blue-50 hover:bg-blue-100 text-blue-600 " }   cursor-pointer text-sm font-bold rounded-xl p-2 flex items-center gap-2`}
                                                 disabled={followLoading === suggestion._id}
                                             >
                                                 {followLoading === suggestion._id ? <Spinner size="sm" /> : <IoPersonAdd />}

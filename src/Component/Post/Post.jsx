@@ -11,7 +11,7 @@ export default function Post({post , callBack ,setPosts,activeTab}) {
 
         return (
         <>
-                <div className='post border-2 border-gray-200 shadow-[0_6px_10px_rgba(0,0,0,0.25)] rounded-xl '>
+                <div className='post  shadow-md rounded-xl '>
                         
                         <PostHeader activeTab={activeTab} setPosts={setPosts} setIsEditing={setIsEditing} callBack={callBack} photo={post.user.photo} id={post.id} name={post.user.name} username={post.user.username} createdAt={post.createdAt} privacy={post.privacy} userId={post?.user._id} bookmarked={post.bookmarked}   />
 

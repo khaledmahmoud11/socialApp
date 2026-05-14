@@ -99,7 +99,7 @@ export default function CreatePost({setPosts}) {
           }} className='absolute bg-black text-white top-0 right-0 rounded-full p-2 cursor-pointer '> <IoMdClose /> </span>
         </>}
       </div>
-      <hr  />
+      <hr className='border-gray-300'  />
       <div className='flex justify-between'>
         <div className='flex gap-3 items-center '>
           <p onClick={()=>handleSelectImage()} className='flex gap-2 items-center cursor-pointer '> <FaImage className='text-green-600' />photo/videos</p>

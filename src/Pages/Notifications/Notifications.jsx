@@ -40,7 +40,7 @@ export default function Notifications() {
     },[])
     return (
         <>
-            <div className="mx-auto my-10 p-5 border border-gray-100 rounded-xl w-full max-w-4xl shadow-lg ">
+            <div className="mx-auto my-10 p-5 border border-gray-100 rounded-xl w-full max-w-4xl shadow-md">
                 <div className="header my-4">
                     <div className="flex flex-col gap-2 md:flex-row items-center justify-between ">
                         <div className='text-center md:text-start'>

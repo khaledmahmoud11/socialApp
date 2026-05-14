@@ -108,7 +108,7 @@ export default function Profile() {
                         <span></span>
                     </div>
                 </div>
-                <div className='p-4 rounded-xl shadow-[0_10px_15px_rgba(0,0,0,0.3)] -translate-y-10 space-y-3 '>
+                <div className='p-4 rounded-xl shadow-md -translate-y-10 space-y-3 '>
                     <div className='p-5 w-full bg-white  rounded-2xl container mx-auto'>
                         <div className='flex flex-col lg:items-center lg:flex-row lg:justify-between w-full'>
                             <div className='flex items-center gap-3'>
@@ -149,7 +149,7 @@ export default function Profile() {
                     </div>
                     <hr className='text-gray-300 my-3' />
                     <div className='grid bg-white gap-3 grid-cols-3 items-stretch justify-between'>
-                        <div className='col-span-3 lg:col-span-2 py-2 px-4 border-1 border-gray-300 rounded-xl shadow-sm '>
+                        <div className='col-span-3 lg:col-span-2 py-2 px-4 border-1 border-gray-300 rounded-xl shadow-md '>
                             <h3 className='font-bold text-xl mb-3'>About</h3>
                             <div className="space-y-2">
                                 {user?.id===profileData.id && <>
@@ -172,7 +172,7 @@ export default function Profile() {
                     </div>
 
                 </div>
-                <div className='p-4 border-1 border-gray-300 rounded-xl shadow-[0_10px_15px_rgba(0,0,0,0.3)] '>
+                <div className='p-4 border-1 border-gray-300 rounded-xl shadow-md '>
                     <div className='flex justify-between items-center '>
                         <div className='flex gap-2 items-center'>
                             <span className='text-blue-500 font-bold p-2 border-1 border-gray-300 rounded-xl flex items-center gap-2 '> <FaRegNewspaper /> My Posts</span>
