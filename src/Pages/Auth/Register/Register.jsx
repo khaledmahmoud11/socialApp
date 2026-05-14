@@ -3,7 +3,7 @@ import {Input} from "@heroui/input";
 import {DatePicker} from "@heroui/date-picker";
 import {Select, SelectItem} from "@heroui/react";
 import {Button, ButtonGroup} from "@heroui/button";
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { regSchema } from '../../../Liberary/ValidationSchema/AuthnticationSchema';
@@ -50,8 +50,6 @@ export default function Register() {
   try {
 
     const response = await userRegister(data);
-    console.log(response,"loooooook here")
-    console.log(response.data.message);
     toast.success(response.data.message)
     localStorage.setItem("userToken",response.data.data.token);
     setToken(response.data.data.token);

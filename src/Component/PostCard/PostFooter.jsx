@@ -40,7 +40,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
     function changeInput(comment){
         setEditCommentId(comment._id);
         setNewContent(comment.content)
-        // console.log("hi")
     }
     function handleCancelEditing(){
         setEditCommentId(null)
@@ -56,7 +55,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
             }
             const response = await editComment( postId , commentId  , formData )
             setComments(prev => prev.map(c => c._id === commentId ? {...c, content: newContent} : c));
-            console.log(response,"after editing 466666666666666666666666666666666666666")
             setEditCommentId(null)
             setReplies(prev =>
                 prev.map(reply =>
@@ -126,7 +124,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
         try{
         setReplyloading(true)
         const response = await getAllReplies(postId,commentID);
-        console.log(response,"replies for comment");
         setReplies(response.data.data.replies)
 
         }catch(error){
@@ -147,7 +144,7 @@ export default function PostFooter({ comments , setComments , postId , userId , 
                 formData.append("image",sendingPhoto)
             }
             const response = await createReply(postId,commentID,formData)
-            console.log(response)
+            toast.success(response.data.message)
             setReplyBody("")
             setDisplayPhoto("")
             setSendingPhoto("")

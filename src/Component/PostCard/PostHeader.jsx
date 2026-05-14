@@ -36,7 +36,6 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
         try {
             setLoadingSave(true);
             const response = await BookmarkPost(postId);
-            console.log(response,"after save post777777777777777777777777777777777777777")
             if(response.data.data.bookmarked){
                 toast.success("Post saved successfully")
             }else{

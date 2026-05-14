@@ -34,9 +34,7 @@ export default function Settings() {
             }
             const response = await updatePassword(body);
             localStorage.setItem("userToken",response.data.data.token);
-            console.log(response.data.token,"token after changeing")
             setToken(response.data.data.token);
-            console.log(response,"data after changeing")
             toast.success(response.data.message)
         }catch(error){
             console.log(error)

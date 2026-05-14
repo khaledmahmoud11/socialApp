@@ -16,7 +16,6 @@ export default function PostDetails() {
   useEffect(() => {
     async function fetchPostDetails(postId){
       let response = await getPostDetails(postId);
-      console.log(response.data.data.post)
       setPost(response.data.data.post)
     }
     fetchPostDetails(id);

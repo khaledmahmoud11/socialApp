@@ -31,7 +31,6 @@ export default function Profile() {
     const [sendingProfileImage, setSendingProfileImage] = useState("")
     const [displayProfileImage, setDisplayProfileImage] = useState("")
     
-    console.log(profileData,"profileData for profilepage" )
     
     const queryClient = useQueryClient();
     function handlDeleteProfilePost(){
@@ -44,7 +43,6 @@ export default function Profile() {
     }
 
     function handleUploadImage(){
-        console.log(changePhoto.current.files[0]);
         setSendingProfileImage(changePhoto.current.files[0])
         setDisplayProfileImage(URL.createObjectURL(changePhoto.current.files[0]))
         setIsChanging(true)

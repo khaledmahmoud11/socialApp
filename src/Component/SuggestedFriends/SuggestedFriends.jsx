@@ -9,7 +9,6 @@ import { AuthContext } from "../../Context/AuthContext";
 
 export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
 
-    console.log(suggestions,"9999999999999999999999999999999999999999")
     const {profileData} = useContext(AuthContext);
     const [followLoading, setFollowLoading] = useState(null);
     const [searchInput, setsearchInput] = useState("")

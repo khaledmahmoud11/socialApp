@@ -49,7 +49,6 @@ export default function NewsFeed() {
       setAllPostLoading(true);
       let response = await getMyPosts(userId);
       setPosts(response.data.data.posts);
-      console.log(response.data.data.posts,"11111111111111111111111111111111111111111111")
     } catch (error) {
       console.log(error)
     }finally{

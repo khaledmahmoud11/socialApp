@@ -1,10 +1,24 @@
-import React, { useState } from 'react'
-import { Tabs, Tab } from "@heroui/react";
+import React, { useEffect, useState } from 'react'
+import { Tabs, Tab, Spinner } from "@heroui/react";
 import { FaCheckDouble } from "react-icons/fa6";
 import Notification from '../../Component/Notification/Notification';
+import { getAllNotifications } from '../../services/Notifications';
 
 export default function Notifications() {
     const [selected, setSelected] = useState("all");
+    const [notifications, setNotifications] = useState([]);
+    const [isLoading, setIsLoading] = useState(false)
+    async function fetchAllNotification(){
+        try {
+            const response = await getAllNotifications();
+            console.log(response,"for all notification")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(()=>{
+        fetchAllNotification();
+    })
     return (
         <>
             <div className="container mx-auto my-10 p-5  border border-gray-300 rounded-xl h-120">
@@ -39,7 +53,20 @@ export default function Notifications() {
                         <Tab key="unread" title="Unread" />
                         </Tabs>
                 </div>
-                <Notification/>
+                {/* {isLoading ? 
+                    <>
+                        <div className="flex items-center gap-2 text-gray-500">
+                            <Spinner color='text-gray-500' size='sm'/> Loading Your Notification ...
+                        </div>
+                    </>
+                : notifications.length===0 ?
+                    <>
+                        <p>no notification for you </p>
+                    </>
+                :
+                    <Notification/> 
+                } */}
+                
             </div>
         </>
     )

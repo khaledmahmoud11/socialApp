@@ -25,7 +25,6 @@ export default function CreatePost({setPosts}) {
     inputPhoto.current.click();
   }
   function handleUploadImage(){
-    console.log(inputPhoto.current.files[0]);
     setSendingImage(inputPhoto.current.files[0])
     setDisplayImage(URL.createObjectURL(inputPhoto.current.files[0]))
   }

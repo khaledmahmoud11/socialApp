@@ -9,7 +9,6 @@ export default function Post({post , callBack ,setPosts,activeTab}) {
         const [isEditing, setIsEditing] = useState(false);
         const [loadingComment, setloadingComment] = useState(false);
 
-        console.log(post,"post ob")
         return (
         <>
                 <div className='post border-2 border-gray-200 shadow-[0_6px_10px_rgba(0,0,0,0.25)] rounded-xl '>
