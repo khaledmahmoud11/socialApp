@@ -109,7 +109,7 @@ export default function Profile() {
                 </div>
                 <div className='p-4 rounded-xl shadow-md -translate-y-10 space-y-3 '>
                     <div className='p-5 w-full bg-white  rounded-2xl container mx-auto'>
-                        <div className='flex flex-col lg:items-center lg:flex-row lg:justify-between w-full'>
+                        <div className='flex flex-col lg:items-center lg:flex-row lg:justify-between w-full  space-y-3'>
                             <div className='flex items-center gap-3'>
                                 <div className='relative'>
                                     <img src={displayProfileImage || user?.photo} className="rounded-full w-25 h-25 " alt="" />
@@ -126,18 +126,18 @@ export default function Profile() {
                                     <p className='text-xl text-gray-700 flex items-center gap-2'><MdAlternateEmail /> {user?.username} </p>
                                 </div>
                             </div>
-                            <div className='flex items-center justify-between lg:justify-start  gap-5'>
-                                <div className='p-5 border-1 border-gray-200 rounded-xl text-center'>
-                                    <h3 className='text-gray-700 text-xl'>Follower</h3>
-                                    <p className='text-2xl font-bold'>{user?.followersCount}</p>
+                            <div className='flex items-center justify-between lg:justify-start  gap-2  '>
+                                <div className='flex flex-col rounded-2xl border border-slate-200 bg-white px-3 py-3 text-center sm:px-4 sm:py-4'>
+                                    <h3 className='text-[8px] font-bold uppercase tracking-wide text-slate-500 sm:text-xs'>Follower</h3>
+                                    <p className='mt-1 text-xl font-black text-slate-900 sm:text-3xl'>{user?.followersCount}</p>
                                 </div>
-                                <div className='p-5 border-1 border-gray-200 rounded-xl text-center'>
-                                    <h3 className='text-gray-700 text-xl'>Following</h3>
-                                    <p className='text-2xl font-bold'>{user?.followingCount}</p>
+                                <div className='flex flex-col rounded-2xl border border-slate-200 bg-white px-3 py-3 text-center sm:px-4 sm:py-4'>
+                                    <h3 className='text-[8px] font-bold uppercase tracking-wide text-slate-500 sm:text-xs'>Following</h3>
+                                    <p className='mt-1 text-xl font-black text-slate-900 sm:text-3xl'>{user?.followingCount}</p>
                                 </div>
-                                <div className='p-5 border-1 border-gray-200 rounded-xl text-center'>
-                                    <h3 className='text-gray-700 text-xl'>Bookmarks</h3>
-                                    <p className='text-2xl font-bold'>{user?.bookmarksCount}</p>
+                                <div className='flex flex-col rounded-2xl border border-slate-200 bg-white px-3 py-3 text-center sm:px-4 sm:py-4'>
+                                    <h3 className='text-[8px] font-bold uppercase tracking-wide text-slate-500 sm:text-xs'>Bookmarks</h3>
+                                    <p className='mt-1 text-xl font-black text-slate-900 sm:text-3xl'>{user?.bookmarksCount}</p>
                                 </div>
                             </div>
 
@@ -147,8 +147,8 @@ export default function Profile() {
 
                     </div>
                     <hr className='text-gray-300 my-3' />
-                    <div className='grid bg-white gap-3 grid-cols-3 items-stretch justify-between'>
-                        <div className='col-span-3 lg:col-span-2 py-2 px-4 border-1 border-gray-300 rounded-xl shadow-md '>
+                    <div className=' bg-white  items-stretch justify-between'>
+                        <div className='py-2 px-4 border-1 border-gray-300 rounded-xl bg-gray-100 '>
                             <h3 className='font-bold text-xl mb-3'>About</h3>
                             <div className="space-y-2">
                                 {user?.id===profileData.id && <>
@@ -158,31 +158,14 @@ export default function Profile() {
                                 <p className='flex items-center gap-2 text-gray-700' > <MdOutlineDateRange />{formatDate(user?.dateOfBirth)}</p>
                             </div>
                         </div>
-                        <div className='space-y-3 col-span-3 lg:col-span-1 flex flex-col sm:flex-row lg:flex-col gap-2 items-stretch'>
-                            <div className='border-1 border-gray-300 rounded-xl p-3 w-full flex-1'>
-                                <h3 className='text-blue-700 font-bold'>My Post</h3>
-                                <p className='text-xl font-bold'> {myPosts?.length}</p>
-                            </div>
-                            <div className='border-1 border-gray-300 rounded-xl p-3 w-full flex-1'>
-                                <h3 className='text-blue-700 font-bold'>Saved Post</h3>
-                                <p className='text-xl font-bold'> 0</p>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
-                <div className='p-4 border-1 border-gray-300 rounded-xl shadow-md '>
-                    <div className='flex justify-between items-center '>
-                        <div className='flex gap-2 items-center'>
-                            <span className='text-blue-500 font-bold p-2 border-1 border-gray-300 rounded-xl flex items-center gap-2 '> <FaRegNewspaper /> My Posts</span>
-                            <span className='p-2 font-bold border-1 border-gray-300 rounded-xl flex items-center gap-2'><FaBookmark /> Saved</span>
-                        </div>
-                        <span className='text-xl font-bold'>{myPosts?.length}</span>
-                    </div>
-                </div>
+
             </div>
             {/* <CreatePost fetchAllPosts={getMyPosts(userId)}/> */}
-            <div className='my posts space-y-5'>
+            <div className='my posts space-y-8 my-5'>
                 {isLoading ? <PostSkeleton />  :  <> {myPosts?.map((post)=> <Post callBack={handlDeleteProfilePost} key={post._id} post={post} />)} </>}
             </div>
         </div>
