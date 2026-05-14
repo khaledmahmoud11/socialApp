@@ -16,19 +16,7 @@ export async function getAllNotifications() {
     return data;
 }
 
-export async function getUnreadNotifications() {
 
-    const token = Cookies.get('userToken');
-    
-    let data = await axios.get(`${base_url}/notifications?unread=true`, {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        }
-    })
-
-    return data;
-}
 
 export async function markNotificationAsRead(notificationId) {
 
