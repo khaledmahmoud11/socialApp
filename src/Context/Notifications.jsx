@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState} from 'react';
 import { getNotificationsCount } from '../services/Notifications';
 import Cookies from "js-cookie";
 
-const NotificationContext = createContext();
+export const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
     const [count, setCount] = useState(0);

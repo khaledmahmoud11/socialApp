@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Spinner } from '@heroui/react';
 import { FaCheck } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
@@ -6,9 +6,10 @@ import { FaRegComment } from "react-icons/fa";
 import { FaShare } from "react-icons/fa";
 import { markNotificationAsRead } from '../../services/Notifications';
 import { Link } from 'react-router';
+import { NotificationContext } from '../../Context/Notifications';
 
 export default function Notification({notification,setNotifications}) {
-    
+    const {setCount,count} = useContext(NotificationContext)
     const [isLaoding, setIsLaoding] = useState(false)
     async function fetchNotificationMark(notificationId){
         try {
@@ -21,6 +22,7 @@ export default function Notification({notification,setNotifications}) {
                     : notification
                 )
             );
+            setCount(count-1);
         } catch (error) {
             console.log(error)
         }finally{

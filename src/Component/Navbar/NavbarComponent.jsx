@@ -23,17 +23,20 @@ import Cookies from 'js-cookie';
 import logo from "../../assets/app_photos/1771039394530-c4f38738-a94d-4d75-93fa-02ec2d0341f4-route-logo.jfif"
 import { NavLink, useNavigate } from 'react-router';
 import { AuthContext } from '../../Context/AuthContext';
+import { NotificationContext } from '../../Context/Notifications';
 export default function NavbarComponent() {
-    let navigate =useNavigate()
-    let {setToken ,profileData}=useContext(AuthContext)
+    const navigate =useNavigate()
+    const {count} = useContext(NotificationContext)
+    const {setToken ,profileData}=useContext(AuthContext)
     const [active, setActive] = useState("/");
 
     const navItems = [
-      { label: "Feed", icon: <CiHome />, path: "/" },
-      { label: "Profile", icon: <CiUser />, path: "/profile" },
-      { label: "Notifications", icon: <FiMessageCircle />, path: "/notifications" },
+      { label: "Feed", icon: <CiHome size={20} />, path: "/" },
+      { label: "Profile", icon: <CiUser size={20} />, path: "/profile" },
+      { label: "Notifications", icon: <FiMessageCircle size={20} />, path: "/notifications" },
     ];
     
+
   function handleLogOut(){
     Cookies.remove('user_token');
     navigate("/login");
@@ -60,12 +63,22 @@ export default function NavbarComponent() {
                       navigate(item.path);
                     }}
                     className={`
-                      flex gap-1 items-center font-bold cursor-pointer px-3 py-2 rounded-lg transition
+                      relative flex gap-1 items-center font-bold cursor-pointer px-3 py-2 rounded-lg transition
                       ${isActive ? "bg-white text-blue-600" : "text-gray-700"}
                       hover:bg-white hover:text-black
                     `}
                   >
-                    {item.icon} <span className='hidden md:flex'>{item.label}</span>
+                      
+
+                    <span className='relative'>
+                      {item.label ==="Notifications" && count >0 && <>
+                        <div className="absolute w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center text-sm -top-2 -right-2">
+                          {count}
+                        </div>
+                      </>}
+                        
+                      {item.icon}
+                    </span> <span className='hidden md:flex'>{item.label}</span>
                   </button>
                 </li>
               );

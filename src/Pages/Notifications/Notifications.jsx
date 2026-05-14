@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Tabs, Tab, Spinner } from "@heroui/react";
 import { FaCheckDouble } from "react-icons/fa6";
 import Notification from '../../Component/Notification/Notification';
 import { getAllNotifications, markAllNotification } from '../../services/Notifications';
+import { NotificationContext } from '../../Context/Notifications';
 
 export default function Notifications() {
+    const {setCount} = useContext(NotificationContext)
     const [selected, setSelected] = useState("all");
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
@@ -31,6 +33,7 @@ export default function Notifications() {
                     isRead: true
                 }))
             );
+            setCount(0)
         } catch (error) {
             console.log(error)
         }
