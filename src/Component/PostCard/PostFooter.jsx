@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Input, Spinner} from "@heroui/react";
 import { BsThreeDots } from 'react-icons/bs';
 import { AuthContext } from '../../Context/AuthContext';
-import { createReply, DeleteComment, editComment, getAllReplies } from '../../services/CommentServices';
+import { createReply, DeleteComment, editComment, getAllReplies, likeComment } from '../../services/CommentServices';
 import { toast } from 'react-toastify';
 import { FaImage } from "react-icons/fa6";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
@@ -158,6 +158,27 @@ export default function PostFooter({ comments , setComments , postId , userId , 
     }
 
 
+    const [isLoadingLiking, setisLoadingLiking] = useState(false)
+    async function handleLikeReply(postId,commentID){
+        try {
+            setisLoadingLiking(true);
+            const response = await likeComment(postId,commentID);
+            console.log(response,"after liking reply");
+            setReplies(prev =>
+                prev.map(r =>
+                    r._id === response.data.data.comment._id
+                        ? response.data.data.comment
+                        : r
+                )
+            );
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setisLoadingLiking(false)
+        }
+    }
+
+
     return (
         <>  
 
@@ -288,7 +309,23 @@ export default function PostFooter({ comments , setComments , postId , userId , 
                                                                     <div className='flex justify-between items-center w-full'>
                                                                         <div className="flex items-center gap-3 my-3">
                                                                             <p className='text-gray-400 text-sm '> {formatDate(reply.createdAt)} </p>
-                                                                            <button className='hover:underline hover:text-blue-400 transition-all duration-200 cursor-pointer'>like</button>                                                                    
+                                                                            <button
+                                                                                onClick={() => handleLikeReply(postId, reply._id)}
+                                                                                className={`transition-all duration-200 cursor-pointer hover:underline flex items-center gap-1 ${
+                                                                                    reply.likes.includes(profileData._id)
+                                                                                        ? 'text-blue-500 font-semibold'
+                                                                                        : 'text-gray-500 hover:text-blue-400'
+                                                                                }`}
+                                                                            >
+                                                                                {isLoadingLiking ?
+                                                                                    "...Liking"
+                                                                                    :
+                                                                                    reply.likes.includes(profileData._id) 
+                                                                                    ? 'Liked' : 'Like' 
+                                                                                }
+                                                                                ({reply.likesCount})
+                                                                                
+                                                                            </button>                                                                   
                                                                         </div>
                                                                     </div>                                                     
                                                                 </div>

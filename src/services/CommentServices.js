@@ -81,3 +81,16 @@ export async function createReply(postId,commentID,formData) {
 
     return data;
 }
+
+export async function likeComment(postId,commentId) {
+
+    const token = Cookies.get('userToken');
+    
+    let data = await axios.put(`${base_url}/posts/${postId}/comments/${commentId}/like`,{}, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    return data;
+}
