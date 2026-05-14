@@ -8,7 +8,7 @@ export default function Notifications() {
     const [selected, setSelected] = useState("all");
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
-
+    const unreadNotifications = notifications.filter(n => !n.isRead);
     async function fetchAllNotification(){
         try {
             setIsLoading(true);
@@ -35,7 +35,6 @@ export default function Notifications() {
             console.log(error)
         }
     }
-    
     useEffect(()=>{
         fetchAllNotification();
     },[])
@@ -82,15 +81,34 @@ export default function Notifications() {
                     </>
                 : notifications.length===0 ?
                     <>
-                        <p>no notification for you </p>
+                        <div className="text-center text-gray-500 py-10">
+                                No Unread Notifications 
+                        </div>
                     </>
                 :
-                    notifications.map((notification)=>(
-                        <React.Fragment key={notification._id}>
-                            <Notification notification={notification} setNotifications={setNotifications}/>
-                        </React.Fragment>
-                    ))
+                    selected === "all" ? (
+                        notifications.map((notification) => (
+                            <Notification
+                                key={notification._id}
+                                notification={notification}
+                                setNotifications={setNotifications}
+                            />
+                        ))
+                        ) : unreadNotifications.length === 0 ? (
+                            <div className="text-center text-gray-500 py-10">
+                                No Unread Notifications 
+                            </div>
+                        ) : (
+                        unreadNotifications.map((n) => (
+                            <Notification
+                                key={n._id}
+                                notification={n}
+                                setNotifications={setNotifications}
+                            />
+                        ))
+                        )
                 }
+
                 
             </div>
         </>

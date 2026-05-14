@@ -98,7 +98,11 @@ export default function Notification({notification,setNotifications}) {
                                 :
                                     <>
                                         <button 
-                                            onClick={()=>(fetchNotificationMark(notification._id))}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                fetchNotificationMark(notification._id);
+                                            }}
                                             className='mt-2 flex items-center gap-2 font-semibold text-xs text-blue-500 bg-white px-2 py-1 rounded-lg cursor-pointer hover:bg-blue-100 border border-transparent hover:border-blue-200 transition-all duration-200 '
                                         >
                                             {isLaoding ? <Spinner size="sm" className="scale-75 text-" /> : <FaCheck /> } Mark As Read
