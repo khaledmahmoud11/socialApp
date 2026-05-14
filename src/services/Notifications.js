@@ -16,8 +16,6 @@ export async function getAllNotifications() {
     return data;
 }
 
-
-
 export async function markNotificationAsRead(notificationId) {
 
     const token = Cookies.get('userToken');
@@ -31,11 +29,26 @@ export async function markNotificationAsRead(notificationId) {
 
     return data;
 }
+
 export async function markAllNotification() {
 
     const token = Cookies.get('userToken');
     
     let data = await axios.patch(`${base_url}/notifications/read-all`, {}, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    return data;
+}
+
+export async function getNotificationsCount() {
+
+    const token = Cookies.get('userToken');
+    
+    let data = await axios.get(`${base_url}/notifications/unread-count`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
