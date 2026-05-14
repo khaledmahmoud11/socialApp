@@ -158,10 +158,10 @@ export default function PostFooter({ comments , setComments , postId , userId , 
     }
 
 
-    const [isLoadingLiking, setisLoadingLiking] = useState(false)
+    const [isLoadingLiking, setisLoadingLiking] = useState(null)
     async function handleLikeReply(postId,commentID){
         try {
-            setisLoadingLiking(true);
+            setisLoadingLiking(commentID);
             const response = await likeComment(postId,commentID);
             console.log(response,"after liking reply");
             setReplies(prev =>
@@ -174,7 +174,7 @@ export default function PostFooter({ comments , setComments , postId , userId , 
         } catch (error) {
             console.log(error)
         }finally{
-            setisLoadingLiking(false)
+            setisLoadingLiking(null)
         }
     }
 
@@ -317,7 +317,7 @@ export default function PostFooter({ comments , setComments , postId , userId , 
                                                                                         : 'text-gray-500 hover:text-blue-400'
                                                                                 }`}
                                                                             >
-                                                                                {isLoadingLiking ?
+                                                                                {isLoadingLiking === reply._id  ?
                                                                                     "...Liking"
                                                                                     :
                                                                                     reply.likes.includes(profileData._id) 

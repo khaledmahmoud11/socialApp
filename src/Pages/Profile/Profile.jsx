@@ -167,6 +167,7 @@ export default function Profile() {
             {/* <CreatePost fetchAllPosts={getMyPosts(userId)}/> */}
             <div className='my posts space-y-8 my-5'>
                 {isLoading ? <PostSkeleton />  :  <> {myPosts?.map((post)=> <Post callBack={handlDeleteProfilePost} key={post._id} post={post} />)} </>}
+                                                        
             </div>
         </div>
     </>

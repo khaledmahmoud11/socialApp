@@ -28,7 +28,7 @@ import {
   
 } from "@heroui/react";
 import { toast } from 'react-toastify';
-export default function PostBody({ image , body , likesCount , commentsCount , likes , id , sharesCount  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment , name , username ,isShare , sharedPost ,setPosts  }) {
+export default function PostBody({ image , body , likesCount , commentsCount , likes , id , sharesCount , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment , name , username ,isShare , sharedPost ,setPosts  }) {
   
   const photoComment = useRef();
   const inputbody = useRef();
@@ -211,7 +211,7 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
           </div>
           <div className='flex gap-3 items-center'>
             <span className='flex items-center gap-2 text-sm text-gray-600 '> <FaShare size={12} /> {sharesCount} share</span>
-            <button onClick={()=>fetchAllComments(id)} disabled={loadingComment}  className="bg-transparent  cursor-pointer flex items-center gap-2 text-sm text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"> {commentsCount} comments </button>
+            <button onClick={()=>fetchAllComments(id)} disabled={loadingComment}  className="bg-transparent  cursor-pointer flex items-center gap-2 text-sm text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"> {comments.length ===0 ? commentsCount  :comments.length }  comments </button>
             <Link to={`/postDetails/${id}`} className='text-blue-600 cursor-pointer text-sm '> View Details</Link>
           </div>
         </div>
