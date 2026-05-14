@@ -17,6 +17,7 @@ import { Button, Input } from '@heroui/react';
 import { editPost, sharePost } from '../../services/PostServicies';
 import { createLike } from '../../services/LikeServices';
 import { AuthContext } from '../../Context/AuthContext';
+import { RiShareBoxFill } from "react-icons/ri";
 
 import {
   Modal,
@@ -27,7 +28,7 @@ import {
   
 } from "@heroui/react";
 import { toast } from 'react-toastify';
-export default function PostBody({ image , body , likesCount , likes , id , sharesCount , comments ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment , name , username  }) {
+export default function PostBody({ image , body , likesCount , likes , id , sharesCount , comments ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment , name , username ,isShare , sharedPost ,setPosts  }) {
   
   const photoComment = useRef();
   const inputbody = useRef();
@@ -145,10 +146,12 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
           formData.append("body",shareBody);
         const response = await sharePost(postId,formData);
         console.log(response,"response for share Post ");
+        toast.success(response.data.message);
+        const newPost = response.data.data.post;
+        setIsOpen(false)
+        setPosts((prevPosts) => [newPost, ...prevPosts]);
         setShareBody("");
         inputbody.current.value = "";
-        setIsOpen(false)
-        toast.success(response.data.data.message)
       } catch (error) {
         console.log(error)
       }finally{
@@ -160,7 +163,7 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <div className="postBody">
+      <div className="postBody px-4">
         
         {isEditing ? <textarea value={postBody} onChange={(e)=>setPostBody(e.target.value)} className='w-full h-24  outline-0 border-1 border-gray-300 rounded-xl shadow-md'> </textarea>  : <p className='px-3 py-2'> {postBody} </p> }
         
@@ -169,9 +172,34 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
             <Button className=' font-bold mx-2 ' onClick={()=>setIsEditing(false)} >Cancel</Button>
             <Button isLoading={loadingEdit} className='bg-blue-600 text-white font-bold' onClick={()=>handleUpdatePost(id)} >Save</Button>
           </>
-        </div> }  
-
-        {image && <img src={image} alt="post_img" className='w-full h-100 object-cover' /> }
+        </div> }
+        {isShare && <>
+          <div className=' bg-gray-200 border border-gray-300 rounded-xl w-full p-3'>
+              <div className="flex items-center justify-between ">
+                <div className='flex items-center gap-2'>
+                  <img src={sharedPost.user.photo} alt="" className='w-10 h-10 rounded-full' />
+                  <div>
+                    <p className='truncate text-sm font-bold text-slate-900 w-20 sm:w-full '>{sharedPost.user.name}</p>
+                    <p className='truncate text-xs text-slate-500'>@{sharedPost.user.username}</p>
+                  </div>
+                </div>
+                <Link 
+                  to={`/PostDetails/${sharedPost._id}`} 
+                  className='flex items-center justify-center gap-1 rounded-lg px-2 py-1 text-xs font-bold text-blue-500 hover:bg-blue-300'>
+                    Original Post <RiShareBoxFill />
+                </Link>
+              </div>
+              <div className="p-3">
+                {sharedPost.body  && <p className='whitespace-pre-wrap text-sm leading-relaxed text-slate-800'>{sharedPost.body}</p> }
+                {sharedPost.image  && <img src={sharedPost.image} alt="post_img" className='w-full h-100 object-cover' />  }
+              </div>
+              
+          </div>
+        
+          </>
+        }
+          
+        {image && <img src={image} alt="post_img" className='w-full h-80 object-cover' /> }
         <div className='flex justify-between items-center p-2'>
           <div className='flex items-center gap-2'>
             <span className='bg-blue-600 rounded-full p-1'> <AiOutlineLike className='text-white' /> </span>
@@ -199,8 +227,9 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
                       onChange={(e)=>setShareBody(e.target.value)}   
                       name="" id=""  
                       placeholder="Say Something About This..." 
-                      className='resize-none w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[17px] leading-relaxed text-slate-800 outline-none transition focus:border-[#1877f2] focus:bg-white'>
+                      className='resize-none w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[17px] leading-relaxed text-slate-800 outline-none transition focus:border-[#1877f2] focus:bg-white'
                       ref={inputbody}
+                      >
                     </textarea>
                     <div className='p-4 bg-gray-200 border-gray-300 border rounded-xl space-y-3'>
                       <div className='flex items-center gap-2'>
@@ -212,7 +241,7 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
                       </div>
                       <div>
                         <p>{body}</p>
-                        <img src={image} alt='post_image' className='w-full h-50 object-cover'/>
+                        {image  ? <img src={image} alt='post_image' className='w-full h-50 object-cover'/>  :  <></> }
 
                       </div>
 
@@ -226,7 +255,7 @@ export default function PostBody({ image , body , likesCount , likes , id , shar
                       className='bg-blue-500 text-white font-bold flex items-center gap-2 '
                       onClick={()=>fetchSharePost(id)}
                       >
-                        {shareLoading ? <Spinner size='sm' className='text-white'/> : <FaShare /> }  Share
+                        {shareLoading ? <Spinner size='sm' color='text-white'/> : <FaShare /> }  Share
                     </Button>
                     
                   </ModalFooter>

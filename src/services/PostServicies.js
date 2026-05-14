@@ -96,15 +96,18 @@ export async function editPost(postId,formData) {
     return data;
 }
 
-export async function sharePost(postID,formData) {
-
+export async function sharePost(postID, body) {
     const token = Cookies.get('userToken');
-    
-    let data = await axios.post(`${base_url}/posts/${postID}/share`, formData , {
+
+    let data = await axios.post(
+        `${base_url}/posts/${postID}/share`,body,
+        {
         headers: {
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
         }
-    })
+        }
+    );
 
     return data;
 }
