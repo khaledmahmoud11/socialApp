@@ -2,33 +2,54 @@ import React, { useEffect, useState } from 'react'
 import { Tabs, Tab, Spinner } from "@heroui/react";
 import { FaCheckDouble } from "react-icons/fa6";
 import Notification from '../../Component/Notification/Notification';
-import { getAllNotifications } from '../../services/Notifications';
+import { getAllNotifications, markAllNotification } from '../../services/Notifications';
 
 export default function Notifications() {
     const [selected, setSelected] = useState("all");
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
+
     async function fetchAllNotification(){
         try {
+            setIsLoading(true);
             const response = await getAllNotifications();
-            console.log(response,"for all notification")
+            console.log(response,"for all notification");
+            setNotifications(response.data.data.notifications)
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setIsLoading(false);
+        }
+    }
+    async function fetchAllNotificationMark(){
+        try {
+            const response = await markAllNotification();
+            console.log(response ,"after read all notification");
+            setNotifications(prev =>
+                prev.map(n => ({
+                    ...n,
+                    isRead: true
+                }))
+            );
         } catch (error) {
             console.log(error)
         }
     }
+    
     useEffect(()=>{
         fetchAllNotification();
-    })
+    },[])
     return (
         <>
-            <div className="container mx-auto my-10 p-5  border border-gray-300 rounded-xl h-120">
-                <div className="header">
+            <div className="mx-auto my-10 p-5 border border-gray-100 rounded-xl w-full max-w-4xl shadow-lg ">
+                <div className="header my-4">
                     <div className="flex flex-col gap-2 md:flex-row items-center justify-between ">
                         <div className='text-center md:text-start'>
                             <h2 className='text-xl font-black text-slate-900 sm:text-2xl'>Notifications</h2>
                             <p className='mt-1 text-sm text-slate-500'>Realtime updates for likes, comments, shares, and follows.</p>
                         </div>
-                        <button 
+                        <button
+                            onClick={()=>fetchAllNotificationMark()}
                             className='flex items-center gap-2 w-full justify-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto cursor-pointer'
                         >
                             <FaCheckDouble /> Mark all as read
@@ -51,9 +72,9 @@ export default function Notifications() {
                         >
                         <Tab key="all" title="All" />
                         <Tab key="unread" title="Unread" />
-                        </Tabs>
+                    </Tabs>
                 </div>
-                {/* {isLoading ? 
+                {isLoading ? 
                     <>
                         <div className="flex items-center gap-2 text-gray-500">
                             <Spinner color='text-gray-500' size='sm'/> Loading Your Notification ...
@@ -64,8 +85,12 @@ export default function Notifications() {
                         <p>no notification for you </p>
                     </>
                 :
-                    <Notification/> 
-                } */}
+                    notifications.map((notification)=>(
+                        <React.Fragment key={notification._id}>
+                            <Notification notification={notification} setNotifications={setNotifications}/>
+                        </React.Fragment>
+                    ))
+                }
                 
             </div>
         </>

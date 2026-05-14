@@ -15,3 +15,30 @@ export async function getAllNotifications() {
 
     return data;
 }
+
+export async function markNotificationAsRead(notificationId) {
+
+    const token = Cookies.get('userToken');
+    
+    let data = await axios.patch(`${base_url}/notifications/${notificationId}/read`, {}, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    return data;
+}
+export async function markAllNotification() {
+
+    const token = Cookies.get('userToken');
+    
+    let data = await axios.patch(`${base_url}/notifications/read-all`, {}, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    return data;
+}

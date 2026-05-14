@@ -44,7 +44,7 @@ export default function NavbarComponent() {
         <Navbar maxWidth='xl'>
         <NavbarBrand className='gap-3'>
           <img src={logo} alt="social_app_logo" width={40} className='rounded-2xl'/>
-          <p className="font-bold text-inherit text-xl">Route Posts</p>
+          <p className="font-bold text-inherit text-xl hidden md:flex">Route Posts</p>
         </NavbarBrand>
 
         <NavbarBrand>
@@ -65,7 +65,7 @@ export default function NavbarComponent() {
                       hover:bg-white hover:text-black
                     `}
                   >
-                    {item.icon} {item.label}
+                    {item.icon} <span className='hidden md:flex'>{item.label}</span>
                   </button>
                 </li>
               );
@@ -83,7 +83,7 @@ export default function NavbarComponent() {
                   src={profileData?.photo}
                 />
                 <div className="flex items-center gap-2 ">
-                  <span className="text-sm font-semibold">{profileData?.name}</span>
+                  <span className="text-sm font-semibold hidden md:flex">{profileData?.name}</span>
                   <span> <FaBars /> </span>
                 </div>
               </div>
