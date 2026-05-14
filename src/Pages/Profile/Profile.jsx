@@ -91,7 +91,6 @@ export default function Profile() {
     });
     const user = userResponse?.data?.data?.user;
     const myPosts = postsResponse?.data?.data?.posts || [];
-    console.log(myPosts,"myPosts66666666666666666666666666666666666666666")
     const isLoading = userLoading || postsLoading;
     return (
     <>
