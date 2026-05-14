@@ -117,7 +117,7 @@ export default function PostFooter({ comments , setComments , postId , userId , 
     }
 
     const [replyloading, setReplyloading] = useState(false)
-
+    console.log(comments,"8888888888888888888888888888888888888888888888888888")
 
     const [replies, setReplies] = useState([])
     async function fetchAllReplies(postId,commentID){
@@ -165,6 +165,24 @@ export default function PostFooter({ comments , setComments , postId , userId , 
             const response = await likeComment(postId,commentID);
             console.log(response,"after liking reply");
             setReplies(prev =>
+                prev.map(r =>
+                    r._id === response.data.data.comment._id
+                        ? response.data.data.comment
+                        : r
+                )
+            );
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setisLoadingLiking(null)
+        }
+    }
+    async function handleLikeComment(postId,commentID){
+        try {
+            setisLoadingLiking(commentID);
+            const response = await likeComment(postId,commentID);
+            console.log(response,"after liking reply");
+            setComments(prev =>
                 prev.map(r =>
                     r._id === response.data.data.comment._id
                         ? response.data.data.comment
@@ -234,7 +252,22 @@ export default function PostFooter({ comments , setComments , postId , userId , 
                                         <div className='flex justify-between items-center w-full'>
                                             <div className="flex items-center gap-3 my-3">
                                                 <p className='text-gray-400 text-sm '> {formatDate(comment.createdAt)} </p>
-                                                <button className='hover:underline hover:text-blue-400 transition-all duration-200 cursor-pointer'>like</button>
+                                                <button 
+                                                    onClick={()=>handleLikeComment(postId, comment._id)} 
+                                                    className={`transition-all duration-200 cursor-pointer hover:underline flex items-center gap-1 ${
+                                                        comment.likes.includes(profileData._id)
+                                                        ? 'text-blue-500 font-semibold'
+                                                        : 'text-gray-500 hover:text-blue-400'
+                                                        }`}
+                                                >
+                                                    {isLoadingLiking === comment._id  ?
+                                                        "...Liking"
+                                                    :
+                                                        comment.likes.includes(profileData._id) 
+                                                        ? 'Liked' : 'Like' 
+                                                    }
+                                                    ({comment.likes.length})
+                                                </button>
                                                 {replayStatement === comment._id ?
                                                     <button onClick={()=>setreplayStatement(null)} className='hover:underline cursor-pointer text-blue-600'>hide Replies</button>
                                                 :
