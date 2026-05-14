@@ -13,6 +13,7 @@ import { GoBookmarkSlash } from "react-icons/go";
 
 export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId  , setIsEditing ,bookmarked ,setPosts,activeTab   }) {
     let {profileData}=useContext(AuthContext);
+    const [loadingSave, setLoadingSave] = useState(false);
 
     const dialogRef = useRef();
     function openDialog() {
@@ -31,8 +32,6 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
             console.log(error)
         }
     }
-
-    const [loadingSave, setLoadingSave] = useState(false)
     async function fetchBookmarkPost(postId){
         try {
             setLoadingSave(true);

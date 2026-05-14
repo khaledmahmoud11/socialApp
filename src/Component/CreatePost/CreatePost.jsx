@@ -12,19 +12,14 @@ import { AuthContext } from '../../Context/AuthContext';
 import { toast } from 'react-toastify';
 
 export default function CreatePost({setPosts}) {
-    let {profileData}=useContext(AuthContext)
-
+  let {profileData}=useContext(AuthContext)
   const inputPhoto = useRef();
   const inputbody = useRef();
-  
-
   const [privacy, setPrivacy] = useState("Public");
   const [sendingImage, setSendingImage] = useState("")
   const [displayImage, setDisplayImage] = useState("")
   const [postContent, setPostContent] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-
- 
 
   function handleSelectImage(){
     inputPhoto.current.click();
@@ -49,14 +44,13 @@ export default function CreatePost({setPosts}) {
       newPost = {
       ...newPost,
       user:{
+        _id:profileData._id,
         name: profileData.name,
         photo :profileData.photo,
         username :profileData.username
 
       }
     };
-      console.log(response,"response for creating post 8888888888888888888888888888888");
-      console.log(newPost,"response for creating post 88888888888888888888888888888887777");
       setDisplayImage("");
       setSendingImage("");
       setPostContent("");
