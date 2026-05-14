@@ -45,14 +45,24 @@ export default function CreatePost({setPosts}) {
           formData.append("image", sendingImage);
       }
       const response = await createPost(formData);
-      const newPost = response.data.data.post;
+      let newPost = response.data.data.post;
+      newPost = {
+      ...newPost,
+      user:{
+        name: profileData.name,
+        photo :profileData.photo,
+        username :profileData.username
+
+      }
+    };
       console.log(response,"response for creating post 8888888888888888888888888888888");
+      console.log(newPost,"response for creating post 88888888888888888888888888888887777");
       setDisplayImage("");
       setSendingImage("");
       setPostContent("");
       inputPhoto.current.value = "";
       inputbody.current.value = ""
-      toast.success(response.data.data.message)
+      toast.success(response.data.message)
       setPosts(prevPosts => [newPost, ...prevPosts]);
 
     } catch (error) {

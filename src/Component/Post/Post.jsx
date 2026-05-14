@@ -4,7 +4,7 @@ import PostBody from '../PostCard/PostBody';
 import PostFooter from '../PostCard/PostFooter';
 import { useState } from 'react';
 // import { getAllPosts } from '../../services/PostServicies';
-export default function Post({post , callBack ,setPosts,activeTab={activeTab}}) {
+export default function Post({post , callBack ,setPosts,activeTab}) {
         const [comments, setComments] = useState([]);
         const [isEditing, setIsEditing] = useState(false);
         const [loadingComment, setloadingComment] = useState(false);
