@@ -135,7 +135,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
     async function handleSubmitReply(postId,commentID){
 
         try{
-            setReplyloading(true)
             const formData = new FormData();
             if(replyBody){
                 formData.append("content",replyBody)
@@ -144,7 +143,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
                 formData.append("image",sendingPhoto)
             }
             const response = await createReply(postId,commentID,formData)
-            console.log(response,"afteradd reply")
             toast.success(response.data.message)
             setReplyBody("")
             setDisplayPhoto("")
@@ -155,8 +153,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
             ]);
         }catch(error){
             console.log(error)
-        }finally{
-            setReplyloading(false)
         }
 
     }
