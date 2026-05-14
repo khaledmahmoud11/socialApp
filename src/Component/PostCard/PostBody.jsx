@@ -99,7 +99,11 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
       setCommentBody("")
       setDisplayPhoto("")
       setSendingPhoto("")
-      fetchAllComments(id)
+      toast.success(response.data.message)
+      setComments(prev => [
+        response.data.data.comment,
+        ...prev
+      ]);
     }catch(error){
       console.log(error)
     }finally{
