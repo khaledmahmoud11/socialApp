@@ -38,7 +38,9 @@ export default function Suggestions() {
 
         fetchAllSuggestions(nextPage);
     }
-
+    const filteredSuggestions = allSuggestions.filter((suggestion) =>
+        suggestion.name.toLowerCase().includes(searchInput.toLowerCase())
+    );
     
     useEffect(()=>{
         fetchAllSuggestions(1);
@@ -54,7 +56,7 @@ export default function Suggestions() {
                         <span> <LuUsers className='text-blue-500' /> </span>
                         <h2 className='font-bold text-black'> Suggested Friends </h2>
                     </div>
-                    <span className='rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600'>{allSuggestions.length}</span>
+                    <span className='rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600'>{filteredSuggestions.length}</span>
                 </div>
 
                 <div>
@@ -78,7 +80,7 @@ export default function Suggestions() {
                                     No Suggested Friends .
                             </div>
                             :
-                            allSuggestions.map((suggestion)=>(
+                            filteredSuggestions.filter((suggestion)=>suggestion.name.toLowerCase().includes(searchInput.toLowerCase())).map((suggestion)=>(
                                 <SuggestionCard suggestion={suggestion}/>
                             ))
                         }
