@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import coverPhoto from "../../assets/app_photos/pexels-pixabay-207130.jpg"
 import { MdAlternateEmail } from "react-icons/md";
 import { FiUsers } from "react-icons/fi";
@@ -15,16 +15,56 @@ import { changeProfileImage, userProfile } from '../../services/Profile';
 import { useParams } from 'react-router';
 import { IoMdFemale } from "react-icons/io";
 import { IoMdMale } from "react-icons/io";
-import { useQuery } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
 import { MdOutlineDateRange } from "react-icons/md";
 import CreatePost from '../../Component/CreatePost/CreatePost';
 
 export default function Profile() {
 
-
-    const {id} = useParams();
+    const [user, setUser] = useState([]);
+    const [myPosts, setMyPosts] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const {profileData}=useContext(AuthContext)
+    const {id} = useParams();
+    const userId = id ?? profileData?.id;
+    async function fetchUserProfile(userId){
+        const response = await userProfile(userId);
+        console.log(response,"profileData");
+        setUser(response.data.data.user);
+    }
+
+
+    async function fetchUserPost(userID){
+        try {
+            setIsLoading(true);
+            const response = await getMyPosts(userID);
+            console.log(response,"userPosts")
+            setMyPosts(response.data.data.posts)
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setIsLoading(false);
+        }
+
+    }
+    useEffect(()=>{
+        fetchUserProfile(userId);
+        fetchUserPost(userId)
+    },[])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const changePhoto = useRef();
     const [isChanging, setIsChanging] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -32,12 +72,7 @@ export default function Profile() {
     const [displayProfileImage, setDisplayProfileImage] = useState("")
     
     
-    const queryClient = useQueryClient();
-    function handlDeleteProfilePost(){
-        queryClient.invalidateQueries({
-            queryKey: ["myPosts", userId],
-        });
-    }
+
     function handleChangeProfilePhoto(){
         changePhoto.current.click();
     }
@@ -77,21 +112,6 @@ export default function Profile() {
         return `${year}-${month}-${day}`;
     }
 
-    const userId = id ?? profileData?.id;
-    const { data: userResponse, isLoading: userLoading } = useQuery({
-        queryKey: ["userProfile", userId],
-        enabled: !!userId,
-        queryFn: () => userProfile(userId),
-    });
-
-    const { data: postsResponse, isLoading: postsLoading } = useQuery({
-        queryKey: ["myPosts", userId],
-        enabled: !!userId,
-        queryFn: () => getMyPosts(userId),
-    });
-    const user = userResponse?.data?.data?.user;
-    const myPosts = postsResponse?.data?.data?.posts || [];
-    const isLoading = userLoading || postsLoading;
     return (
     <>
         <div className='container mx-auto'>
@@ -166,7 +186,7 @@ export default function Profile() {
             </div>
             {/* <CreatePost fetchAllPosts={getMyPosts(userId)}/> */}
             <div className='my posts space-y-8 my-5'>
-                {isLoading ? <PostSkeleton />  :  <> {myPosts?.map((post)=> <Post callBack={handlDeleteProfilePost} key={post._id} post={post} />)} </>}
+                {isLoading ? <PostSkeleton />  :  <> {myPosts?.map((post)=> <Post  key={post._id} post={post} setPosts={setMyPosts} />)} </>}
                                                         
             </div>
         </div>
