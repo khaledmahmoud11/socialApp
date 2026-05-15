@@ -147,9 +147,8 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
       try {
         setShareLoading(true)
         const formData = new FormData();
-          formData.append("body",shareBody);
+        formData.append("body",shareBody);
         const response = await sharePost(postId,formData);
-        console.log(response,"response for share Post ");
         toast.success(response.data.message);
         const newPost = response.data.data.post;
         setIsOpen(false)
