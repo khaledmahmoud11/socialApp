@@ -154,12 +154,13 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
         const newPost = response.data.data.post;
         setIsOpen(false)
         setPosts((prevPosts) => [newPost, ...prevPosts]);
-        setShareBody("");
-        inputbody.current.value = "";
+
       } catch (error) {
-        console.log(error)
+        toast.error(error.response?.data?.message );
       }finally{
         setShareLoading(false)
+        setShareBody("");
+        inputbody.current.value = "";
       }
   
     }
