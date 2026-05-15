@@ -11,6 +11,9 @@ export default function Notifications() {
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
     const unreadNotifications = notifications.filter(n => !n.isRead);
+
+    console.log(notifications,"all notificationssssssssssss")
+
     async function fetchAllNotification(){
         try {
             setIsLoading(true);

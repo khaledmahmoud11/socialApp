@@ -80,6 +80,8 @@ export default function Notification({notification,setNotifications}) {
                                             <span>comment on your post</span>
                                         : notification.type === "like_post"?
                                             <span>like  your post</span>
+                                        : notification.type === "follow_user"?
+                                            <span>started following you</span>
                                         :
                                             <span>share your post</span>
                                         }
