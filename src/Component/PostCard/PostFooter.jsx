@@ -117,7 +117,6 @@ export default function PostFooter({ comments , setComments , postId , userId , 
     }
 
     const [replyloading, setReplyloading] = useState(false)
-    console.log(comments,"8888888888888888888888888888888888888888888888888888")
 
     const [replies, setReplies] = useState([])
     async function fetchAllReplies(postId,commentID){

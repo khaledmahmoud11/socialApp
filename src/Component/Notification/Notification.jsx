@@ -7,6 +7,7 @@ import { FaShare } from "react-icons/fa";
 import { markNotificationAsRead } from '../../services/Notifications';
 import { Link } from 'react-router';
 import { NotificationContext } from '../../Context/Notifications';
+import { RiUserFollowFill } from "react-icons/ri";
 
 export default function Notification({notification,setNotifications}) {
     const {setCount,count} = useContext(NotificationContext)
@@ -65,6 +66,8 @@ export default function Notification({notification,setNotifications}) {
                                             <span> <FaRegComment className='text-blue-500' /> </span>
                                         : notification.type === "like_post"?
                                             <span><FaRegHeart className='text-red-500' /></span>
+                                        : notification.type === "follow_user"?
+                                            <span> <RiUserFollowFill className='text-blue-500' /> </span>
                                         :
                                             <span> <FaShare /> </span>
                                     }

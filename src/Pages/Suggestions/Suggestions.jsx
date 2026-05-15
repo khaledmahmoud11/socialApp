@@ -5,6 +5,7 @@ import { Button, Input, Spinner } from '@heroui/react';
 import { AuthContext } from '../../Context/AuthContext';
 import { getFollowSuggestions } from '../../services/Suggestions';
 import SuggestionCard from '../../Component/SuggestionCard/SuggestionCard';
+import SuggestionsSkeleton from '../../Component/Skeletons/SuggestionsSkeleton';
 
 
 export default function Suggestions() {
@@ -71,21 +72,33 @@ export default function Suggestions() {
                 </div>
 
                 <div className="Suggested Friends">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    
                         {isLoadingSuggestions && pageNumber===1 ?
-                            <p className='flex items-center gap-2 text-gray-500  '> <Spinner size='sm' color='text-gray-500'/> please wait for loading suggestin ...</p>  
+                            <>
+                                <div className="text-center text-gray-500 py-10">
+                                    <Spinner size='sm' color='text-gray-500'/> please wait for loading suggestin ...
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {[1,2,3,4].map(()=>(<SuggestionsSkeleton />))}
+                                </div>
+                            </>
                             :
                             allSuggestions.length===0 ?
                                 <div className="text-center text-gray-500 py-10">
                                     No Suggested Friends .
-                            </div>
+                                </div>
                             :
-                            filteredSuggestions.filter((suggestion)=>suggestion.name.toLowerCase().includes(searchInput.toLowerCase())).map((suggestion)=>(
-                                <SuggestionCard suggestion={suggestion}/>
-                            ))
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {
+                                    filteredSuggestions.filter((suggestion)=>suggestion.name.toLowerCase().includes(searchInput.toLowerCase())).map((suggestion)=>(
+                                        <SuggestionCard suggestion={suggestion}/>
+                                    ))
+                                }
+                            </div>
+                            
                         }
                         
-                    </div>
+                    
                 </div>
 
                 <div>

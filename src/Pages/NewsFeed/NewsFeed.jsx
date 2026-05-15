@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AuthContext } from '../../Context/AuthContext'
 
 import { getAllPosts, getHomeFeedPosts, getMyPosts } from '../../services/PostServicies';
@@ -11,14 +11,13 @@ import SuggestedFriends from '../../Component/SuggestedFriends/SuggestedFriends'
 
 export default function NewsFeed() {
 
-  const {profileData} = useContext(AuthContext);
 
   const [posts, setPosts] = useState([]);
   const [suggestions, setsuggestions] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
   const [callbackFunction, setCallbackFunction] = useState(fetchAllPosts);
   const [allPostLoading, setAllPostLoading] = useState(false)
-
+  const [isLaodingSuggestion, setIsLaodingSuggestion] = useState(false)
 
 
   const [activeTab, setActiveTab] = useState("feed");
@@ -71,18 +70,16 @@ export default function NewsFeed() {
 
   
   async function handleFollowSuggestion(){
-      const response = await getFollowSuggestions();
-      const allSuggestions = response.data.data.suggestions;
-      const following = profileData?.following || [];
-      const suggestionsList = [
-        ...allSuggestions.filter(
-          (suggestion) => !following.includes(suggestion._id)
-        ),
-        ...allSuggestions.filter(
-          (suggestion) => following.includes(suggestion._id)
-        ),
-      ];
-      setsuggestions(suggestionsList);
+      try {
+        setIsLaodingSuggestion(true);
+        const response = await getFollowSuggestions(1);
+        const newSuggestions = response.data.data.suggestions;
+        setsuggestions(newSuggestions);
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setIsLaodingSuggestion(false);
+      }
   }
 
   async function loadPage(){
@@ -139,7 +136,7 @@ export default function NewsFeed() {
             
             <div className='right-side col-span-4 order-2 lg:order-3 lg:col-span-1 lg:sticky lg:top-17.5 self-start'>
               
-                <SuggestedFriends suggestions={suggestions} handleFollowSuggestion={handleFollowSuggestion} />
+                <SuggestedFriends suggestions={suggestions} isLaodingSuggestion={isLaodingSuggestion} />
 
             </div>
           </div>

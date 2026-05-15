@@ -8,7 +8,6 @@ export default function Post({post , callBack ,setPosts,activeTab}) {
         const [comments, setComments] = useState([]);
         const [isEditing, setIsEditing] = useState(false);
         const [loadingComment, setloadingComment] = useState(false);
-        console.log(post,"all postsssss")
 
         return (
         <>

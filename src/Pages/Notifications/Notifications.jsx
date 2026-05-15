@@ -12,13 +12,11 @@ export default function Notifications() {
     const [isLoading, setIsLoading] = useState(false)
     const unreadNotifications = notifications.filter(n => !n.isRead);
 
-    console.log(notifications,"all notificationssssssssssss")
 
     async function fetchAllNotification(){
         try {
             setIsLoading(true);
             const response = await getAllNotifications();
-            console.log(response,"for all notification");
             setNotifications(response.data.data.notifications)
         } catch (error) {
             console.log(error)
@@ -28,8 +26,7 @@ export default function Notifications() {
     }
     async function fetchAllNotificationMark(){
         try {
-            const response = await markAllNotification();
-            console.log(response ,"after read all notification");
+            await markAllNotification();
             setNotifications(prev =>
                 prev.map(n => ({
                     ...n,
