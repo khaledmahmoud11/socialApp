@@ -4,6 +4,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import { Button, Spinner } from '@heroui/react';
 import { IoPersonAdd } from "react-icons/io5";
 import { FaUserCheck } from "react-icons/fa";
+import { Link } from 'react-router';
 
 export default function SuggestionCard({suggestion}) {
     const {profileData,setProfileData} = useContext(AuthContext);
@@ -40,9 +41,13 @@ export default function SuggestionCard({suggestion}) {
                 <div className='border border-gray-300 rounded-xl p-3 mb-3'>
                     <div className='flex justify-between items-center mb-3'>
                         <div className='flex items-center gap-2 '>
-                            <img src={suggestion.photo} alt="" className='w-10 h-10 rounded-full' />
+                            <Link to={`/profile/${suggestion._id}`}>
+                                <img src={suggestion.photo} alt="" className='w-10 h-10 rounded-full' />
+                            </Link>
                                 <div>
-                                    <h3 className='font-bold text-sm'>{suggestion.name}</h3>
+                                    <Link to={`/profile/${suggestion._id}`}>
+                                        <h3 className='font-bold text-sm hover:underline'>{suggestion.name}</h3>
+                                    </Link>
                                     <p className='text-gray-500 text-sm'>{suggestion.username}</p>
                                 </div>
                         </div>
