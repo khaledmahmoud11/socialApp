@@ -51,28 +51,12 @@ export default function Profile() {
         fetchUserPost(userId)
     },[])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const changePhoto = useRef();
     const [isChanging, setIsChanging] = useState(false)
     const [loading, setLoading] = useState(false)
     const [sendingProfileImage, setSendingProfileImage] = useState("")
     const [displayProfileImage, setDisplayProfileImage] = useState("")
     
-    
-
     function handleChangeProfilePhoto(){
         changePhoto.current.click();
     }
@@ -186,7 +170,17 @@ export default function Profile() {
             </div>
             {/* <CreatePost fetchAllPosts={getMyPosts(userId)}/> */}
             <div className='my posts space-y-8 my-5'>
-                {isLoading ? <PostSkeleton />  :  <> {myPosts?.map((post)=> <Post  key={post._id} post={post} setPosts={setMyPosts} />)} </>}
+                {isLoading ? 
+                    <PostSkeleton />  
+                :myPosts.length ===0 ? 
+                    <div className="text-center text-gray-500 py-10">
+                        No Posts Yet 
+                    </div>
+                :
+                    <> 
+                        {myPosts?.map((post)=> <Post  key={post._id} post={post} setPosts={setMyPosts} />)} 
+                    </>
+                }
                                                         
             </div>
         </div>
