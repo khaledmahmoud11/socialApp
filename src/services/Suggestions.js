@@ -3,11 +3,11 @@ import Cookies from 'js-cookie';
 
 const base_url = import.meta.env.VITE_BASE_URL ;
 
-export async function getFollowSuggestions() {
+export async function getFollowSuggestions(page) {
 
     const token = Cookies.get('userToken');
     
-    let data = await axios.get(`${base_url}/users/suggestions?limit=10`, {
+    let data = await axios.get(`${base_url}/users/suggestions?limit=20&page=${page}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

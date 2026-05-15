@@ -6,6 +6,7 @@ import { CiUser } from "react-icons/ci";
 import { followUser } from "../../services/Suggestions";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext";
+import { Link } from "react-router";
 
 export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
 
@@ -79,6 +80,12 @@ export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
                             })}                                    
                         </> 
                     }
+                    <Link
+                        to="/suggestions"
+                        className="mt-3 flex items-center justify-center w-full gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-200 hover:border-slate-300 transition-all"
+                    >
+                        View More
+                    </Link>
 
             </div>
         </>

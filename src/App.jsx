@@ -14,6 +14,7 @@ import Settings from './Pages/Settings/Settings'
 import AppProtectedRoutes from './Component/ProtectedRoutes/AppProtectedRoutes'
 import AuthProtectedRoutes from './Component/ProtectedRoutes/AuthProtectedRoutes'
 import Notifications from './Pages/Notifications/Notifications'
+import Suggestions from './Pages/Suggestions/Suggestions'
 
 function App() {
   let routes = createBrowserRouter([
@@ -21,6 +22,7 @@ function App() {
       {index:true , element: <AppProtectedRoutes> <NewsFeed /> </AppProtectedRoutes>},
       {path:"profile/:id?" , element: <AppProtectedRoutes> <Profile /> </AppProtectedRoutes>},
       {path:"notifications" , element: <AppProtectedRoutes> <Notifications /> </AppProtectedRoutes>},
+      {path:"suggestions" , element: <AppProtectedRoutes> <Suggestions /> </AppProtectedRoutes>},
       {path:"settings" , element: <AppProtectedRoutes> <Settings /> </AppProtectedRoutes>},
       {path:"postDetails/:id" , element: <AppProtectedRoutes> <PostDetails /> </AppProtectedRoutes>},
       {path:"*" , element: <NotFound />},
