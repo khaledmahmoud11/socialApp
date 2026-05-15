@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { LuUsers } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import { Button, Input, Spinner } from '@heroui/react';
@@ -8,7 +8,9 @@ import SuggestionCard from '../../Component/SuggestionCard/SuggestionCard';
 
 
 export default function Suggestions() {
-    // const [searchInput, setsearchInput] = useState("")
+
+    const {profileData} = useContext(AuthContext);
+    console.log(profileData)
     const [allSuggestions, setAllSuggestions] = useState([])
     const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
     

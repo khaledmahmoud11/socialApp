@@ -70,7 +70,8 @@ export default function AuthContextProvider({children}) {
                 setToken,
                 profileData,
                 loading,
-                logout
+                logout,
+                setProfileData
         }}>
             {children}
         </AuthContext.Provider>

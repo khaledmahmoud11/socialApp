@@ -26,6 +26,20 @@ export default function SuggestedFriends({suggestions,handleFollowSuggestion}) {
         }
         
     }
+    async function fetchAllSuggestions(page){
+        try {
+            setIsLoadingSuggestions(true);
+            const response = await getFollowSuggestions(page);
+            const newSuggestions = response.data.data.suggestions;
+            setAllSuggestions((prev) => {
+                return page === 1 ? newSuggestions : [...prev, ...newSuggestions];
+            });
+            } catch (error) {
+                console.log(error)
+            }finally{
+                setIsLoadingSuggestions(false);
+            }
+        }
     
     return (
         <>

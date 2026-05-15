@@ -3,15 +3,30 @@ import { followUser } from '../../services/Suggestions';
 import { AuthContext } from '../../Context/AuthContext';
 import { Button, Spinner } from '@heroui/react';
 import { IoPersonAdd } from "react-icons/io5";
+import { FaUserCheck } from "react-icons/fa";
 
 export default function SuggestionCard({suggestion}) {
-    const {profileData} = useContext(AuthContext);
+    const {profileData,setProfileData} = useContext(AuthContext);
     const [followLoading, setFollowLoading] = useState(null);
     async function handleFollowUser(userID){
         try {
             setFollowLoading(userID);
             const response = await followUser(userID);
             console.log(response,"response after follow");
+            setProfileData((prev) => {
+                const isFollowing = prev.following.includes(userID);
+
+                return {
+                    ...prev,
+                    following: isFollowing
+                        ? prev.following.filter((id) => id !== userID)
+                        : [...prev.following, userID],
+
+                    followingCount: isFollowing
+                        ? prev.followingCount - 1
+                        : prev.followingCount + 1,
+                };
+            });
         } catch (error) {
             console.log(error)
         }finally{
@@ -36,8 +51,20 @@ export default function SuggestionCard({suggestion}) {
                             className={`${profileData.following?.includes(suggestion._id) ? "bg-green-50 hover:bg-green-100 text-green-600  "   : "bg-blue-50 hover:bg-blue-100 text-blue-600 " }   cursor-pointer text-sm font-bold rounded-xl p-2 flex items-center gap-2`}
                             disabled={followLoading === suggestion._id}
                         >
-                        {followLoading === suggestion._id ? <Spinner size="sm" /> : <IoPersonAdd />}
-                        {followLoading === suggestion._id ? "Following" : "Follow"}
+                        {followLoading === suggestion._id ?
+                            <Spinner size="sm" /> 
+                        : profileData.following?.includes(suggestion._id) ?
+                            <FaUserCheck/> 
+                        :
+                            <IoPersonAdd/>
+                        }
+                        {
+                            followLoading === suggestion._id
+                                ? "Updating..."
+                                : profileData.following?.includes(suggestion._id)
+                                    ? "Following"
+                                    : "Follow"
+                        }
                         </Button>
                             </div>
                         <div className='flex gap-3'>
