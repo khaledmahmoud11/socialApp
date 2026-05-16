@@ -103,7 +103,7 @@ export default function NewsFeed() {
   return (
     <>
       
-      <div className='relative min-h-screen '>
+      <div className='relative min-h-screen container mx-auto w-full px-4 '>
         {pageLoading && <>
           <div className='fixed inset-0 z-40 flex items-center justify-center bg-slate-900/20 backdrop-blur-[2px]'>
           <div className='flex items-center gap-2 rounded-xl p-3 bg-white' >
@@ -118,7 +118,7 @@ export default function NewsFeed() {
           
         </>}
         
-        <div className="container mx-auto">
+        <div className="">
           <div className='grid grid-cols-4 gap-8 relative '>
 
             <div className='left-side col-span-4 order-1 lg:order-1 lg:col-span-1 lg:sticky lg:top-17.5 self-start  '>
