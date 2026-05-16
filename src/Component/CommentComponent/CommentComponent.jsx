@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../Context/AuthContext';
 import { createReply, DeleteComment, editComment, getAllReplies, likeComment } from '../../services/CommentServices';
 import { toast } from 'react-toastify';
@@ -9,6 +9,7 @@ import { FaHourglassEnd } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import EditOrDeleteCommentBTn from '../EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
 import { Button, Input, Spinner } from '@heroui/react';
+import CreateComment from '../CreateComment/CreateComment';
 
 export default function CommentComponent({comment,postId,userId,setComments}) {
 
@@ -18,17 +19,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
     const [editCommentId, setEditCommentId] = useState(null)
     const [newContent, setNewContent] = useState("")
     const [laodingChange, setLaodingChange] = useState(false)
-    const [displayPhoto, setDisplayPhoto] = useState("")
-    const [sendingPhoto, setSendingPhoto] = useState("")
-    function selectPhotoComment(){
-        setSendingPhoto(photoComment.current.files[0])
-        setDisplayPhoto(URL.createObjectURL(photoComment.current.files[0]))
-    }
 
-    function deleteDisplayPhoto(){
-        setSendingPhoto("")
-        setDisplayPhoto("")
-    }
 
     const [replyloading, setReplyloading] = useState(false)
 
@@ -46,29 +37,40 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
         setReplyloading(false)
         }
     }
-    async function handleSubmitReply(postId,commentID){
+    async function handleSubmitReply(postId, commentID, {
+        text,
+        image,
+        reset
+    }) {
 
-        try{
+        try {
+
             const formData = new FormData();
-            if(replyBody){
-                formData.append("content",replyBody)
+
+            if (text) {
+                formData.append("content", text)
             }
-            if(sendingPhoto){
-                formData.append("image",sendingPhoto)
+
+            if (image) {
+                formData.append("image", image)
             }
-            const response = await createReply(postId,commentID,formData)
-            toast.success(response.data.message)
-            setReplyBody("")
-            setDisplayPhoto("")
-            setSendingPhoto("")
+
+            const response = await createReply(
+                postId,
+                commentID,
+                formData
+            )
+
             setReplies(prev => [
                 response.data.data.reply,
                 ...prev
-            ]);
-        }catch(error){
+            ])
+
+            reset()
+
+        } catch (error) {
             console.log(error)
         }
-
     }
     async function handleLikeReply(postId,commentID){
         try {
@@ -183,10 +185,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
     }
 
 
-    const photoComment = useRef();
-    function clickPhotoIcon(){
-        photoComment.current.click();
-    }
+
 
 
 
@@ -342,38 +341,16 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                                             <div>
                                                 <div className='flex  gap-2'>
                                                     <img src={profileData.photo} alt="" className='w-10 h-10 rounded-full' />
-                                                    <div className=' w-full bg-gray-300 p-4 border-2 border-transparent focus-within:border-1 focus-within:bg-white focus-within:border-gray-300 rounded-xl'>
-                                                        <Input
-                                                            placeholder='Write a Comment '
-                                                            className='mb-3 w-full '
-                                                            onChange={(e)=>setReplyBody(e.target.value)}
-                                                            value={replyBody}
-                                                        />
-                                                        <div className='flex justify-between items-center'>
-                                                            <div className='flex items-center gap-3'>
-                                                                <span onClick={()=>clickPhotoIcon()} className='cursor-pointer' > <FaImage /> </span>
-                                                                <Input 
-                                                                    type='file' 
-                                                                    ref={photoComment} 
-                                                                    className='hidden'
-                                                                    onInput={()=>selectPhotoComment()}
-                                                                />
-                                                                <span> <MdOutlineEmojiEmotions /> </span>
-                                                            </div>
-                                                            <div>
-                                                                <button disabled={!replyBody && !sendingPhoto} onClick={()=>handleSubmitReply(postId, comment._id)} className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-blue-300 ${!replyloading ? 'text-blue-600 bg-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}> {!replyloading ? <IoSend /> :    <Spinner size='sm' />  }  </button>
-                                                            </div>
-                                                                    
-                                                        </div>
-                                                        <div>
-                                                            {displayPhoto  &&  
-                                                                <div className='relative'>
-                                                                    <img src={displayPhoto} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />
-                                                                    <span onClick={()=>deleteDisplayPhoto()} className='bg-gray-900 rounded-full p-2 text-white absolute top-2.5 right-2.5 cursor-pointer'> <IoCloseSharp /></span>
-                                                                </div> 
-                                                            }
-                                                        </div>   
-                                                    </div>
+                                                    <CreateComment
+                                                        value={replyBody}
+                                                        setValue={setReplyBody}
+                                                        placeholder="Write a Reply"
+                                                        loading={replyloading}
+                                                        wrapperClass="bg-gray-300"
+                                                        onSubmit={(data) =>
+                                                            handleSubmitReply(postId, comment._id, data)
+                                                        }
+                                                    />
 
                                                 </div>
                                             </div>                            

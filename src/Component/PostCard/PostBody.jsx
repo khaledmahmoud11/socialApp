@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { BiRepost } from 'react-icons/bi'
 import { FaImage } from "react-icons/fa6";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
@@ -24,19 +24,15 @@ import {
   ModalFooter,
   
 } from "@heroui/react";
-import { toast } from 'react-toastify';
 import CreateComment from '../CreateComment/CreateComment';
 import PostActions from '../PostActions/PostActions';
 export default function PostBody({post , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment ,setPosts  }) {
   
 
 
-  const photoComment = useRef();
   const [numOfLikes, setNumOfLikes] = useState(post.likesCount);
   const [commentBody, setCommentBody] = useState("")
   const [likesList, setLikesList] = useState(post.likes);
-  const [displayPhoto, setDisplayPhoto] = useState("")
-  const [sendingPhoto, setSendingPhoto] = useState("")
   const [commentloading, setCommentloading] = useState(false)
   const [loadingEdit, setLoadingEdit] = useState(false)
   const [postBody, setPostBody] = useState(post.body);
@@ -63,46 +59,39 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
         }
     }
 
-          function clickPhotoIcon(){
-                  photoComment.current.click();
-          }
-          function selectPhotoComment(){
-                  setSendingPhoto(photoComment.current.files[0])
-                  setDisplayPhoto(URL.createObjectURL(photoComment.current.files[0]))
-          }
-          function deleteDisplayPhoto(){
-                  setSendingPhoto("")
-                  setDisplayPhoto("")
-          }
 
-  async function handleSubmitComment(id){
 
-    try{
-      setCommentloading(true)
-      const formData = new FormData();
-      if(commentBody){
-        formData.append("content",commentBody)
-      }
-      if(sendingPhoto){
-        formData.append("image",sendingPhoto)
-      }
-      const response = await createComment(id,formData)
-      console.log(response)
-      setCommentBody("")
-      setDisplayPhoto("")
-      setSendingPhoto("")
-      toast.success(response.data.message)
-      setComments(prev => [
-        response.data.data.comment,
-        ...prev
-      ]);
-    }catch(error){
-      console.log(error)
-    }finally{
-      setCommentloading(false)
+  async function handleSubmitComment({ text, image, reset }) {
+
+    try {
+
+        setCommentloading(true)
+
+        const formData = new FormData();
+
+        if (text) {
+            formData.append("content", text)
+        }
+
+        if (image) {
+            formData.append("image", image)
+        }
+
+        const response = await createComment(post.id, formData)
+
+        setComments(prev => [
+            response.data.data.comment,
+            ...prev
+        ])
+
+        reset()
+
+    } catch (error) {
+        console.log(error)
+    } finally {
+        setCommentloading(false)
     }
-
-  }
+}
 
   async function fetchAllComments(postId){
     try{
@@ -187,41 +176,13 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
 
 
 
-        <div className=' p-4 border-2 border-transparent focus-within:border-2 focus-within:border-gray-300 rounded-xl'>
-          <Input
-                    placeholder='Write a Comment '
-                    className='mb-3'
-                    onChange={(e)=>setCommentBody(e.target.value)}
-                    value={commentBody}          
-                />
-                
-
-                <div className='flex justify-between items-center'>
-                    <div className='flex items-center gap-3'>
-                        <span onClick={()=>clickPhotoIcon()} className='cursor-pointer' > <FaImage /> </span>
-                        <Input 
-                            type='file' 
-                            ref={photoComment} 
-                            className='hidden'
-                            onInput={()=>selectPhotoComment()}
-                        />
-                        <span> <MdOutlineEmojiEmotions /> </span>
-                    </div>
-                    <div>
-                        <button disabled={!commentBody && !sendingPhoto} onClick={()=>handleSubmitComment(post.id)} className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-blue-300 ${!commentloading ? 'text-blue-600 bg-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}> {!commentloading ? <IoSend /> :    <Spinner size='sm' />  }  </button>
-                    </div>
-                </div>
-
-
-                <div>
-                    {displayPhoto  &&  
-                        <div className='relative'>
-                            <img src={displayPhoto} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />
-                            <span onClick={()=>deleteDisplayPhoto()} className='bg-gray-900 rounded-full p-2 text-white absolute top-2.5 right-2.5 cursor-pointer'> <IoCloseSharp /></span>
-                        </div> 
-                        }
-                </div>
-        </div>
+        <CreateComment
+            value={commentBody}
+            setValue={setCommentBody}
+            placeholder="Write a Comment"
+            loading={commentloading}
+            onSubmit={handleSubmitComment}
+        />
         
           
       </div>
