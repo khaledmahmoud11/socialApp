@@ -8,6 +8,8 @@ export default function Post({post ,setPosts,activeTab}) {
         const [comments, setComments] = useState([]);
         const [isEditing, setIsEditing] = useState(false);
         const [loadingComment, setloadingComment] = useState(false);
+          const [commentBody, setCommentBody] = useState("")
+        
 
 
 
@@ -37,18 +39,12 @@ export default function Post({post ,setPosts,activeTab}) {
                                 comments={comments} 
                                 setComments={setComments}
                                 loadingComment={loadingComment} 
-                                setloadingComment={setloadingComment} 
+                                setloadingComment={setloadingComment}
+                                commentBody={commentBody}
+                                setCommentBody={setCommentBody}  
                         />
 
-                        <PostFooter 
-                                userId={post?.user._id} 
-                                postId={post.id} 
-                                comments={comments} 
-                                setComments={setComments}  
-                                topComment={post.topComment} 
-                                loadingComment={loadingComment} 
-                                setloadingComment={setloadingComment} 
-                        />
+                        
                 </div>
         </>
                 )

@@ -10,7 +10,7 @@ import { AiOutlineLike } from 'react-icons/ai'
 import { Spinner } from '@heroui/react';
 
 import { Link } from 'react-router'
-import { createComment, getAllComments } from '../../services/CommentServices'
+import { getAllComments } from '../../services/CommentServices'
 import { Button, Input } from '@heroui/react';
 import { editPost} from '../../services/PostServicies';
 import { AuthContext } from '../../Context/AuthContext';
@@ -24,16 +24,14 @@ import {
   ModalFooter,
   
 } from "@heroui/react";
-import CreateComment from '../CreateComment/CreateComment';
 import PostActions from '../PostActions/PostActions';
-export default function PostBody({post , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment ,setPosts  }) {
+import CreateComment from '../CommentComponent/CreateComment/CreateComment';
+export default function PostBody({post , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment ,setPosts,commentBody,setCommentBody  }) {
   
 
 
   const [numOfLikes, setNumOfLikes] = useState(post.likesCount);
-  const [commentBody, setCommentBody] = useState("")
   const [likesList, setLikesList] = useState(post.likes);
-  const [commentloading, setCommentloading] = useState(false)
   const [loadingEdit, setLoadingEdit] = useState(false)
   const [postBody, setPostBody] = useState(post.body);
 
@@ -61,37 +59,7 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
 
 
 
-  async function handleSubmitComment({ text, image, reset }) {
-
-    try {
-
-        setCommentloading(true)
-
-        const formData = new FormData();
-
-        if (text) {
-            formData.append("content", text)
-        }
-
-        if (image) {
-            formData.append("image", image)
-        }
-
-        const response = await createComment(post.id, formData)
-
-        setComments(prev => [
-            response.data.data.comment,
-            ...prev
-        ])
-
-        reset()
-
-    } catch (error) {
-        console.log(error)
-    } finally {
-        setCommentloading(false)
-    }
-}
+  
 
   async function fetchAllComments(postId){
     try{
@@ -172,17 +140,16 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
           setLikesList={setLikesList}
           setPosts={setPosts} 
           loadingComment={loadingComment}
+          comments={comments} 
+          setComments={setComments}  
+          setloadingComment={setloadingComment}
+          commentBody={commentBody}
+          setCommentBody={setCommentBody} 
         />
 
 
 
-        <CreateComment
-            value={commentBody}
-            setValue={setCommentBody}
-            placeholder="Write a Comment"
-            loading={commentloading}
-            onSubmit={handleSubmitComment}
-        />
+
         
           
       </div>

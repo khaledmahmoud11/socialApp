@@ -7,9 +7,9 @@ import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { FaHourglassEnd } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
-import EditOrDeleteCommentBTn from '../EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
 import { Button, Input, Spinner } from '@heroui/react';
 import CreateComment from './CreateComment/CreateComment';
+import EditOrDeleteCommentBTn from './EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
 
 export default function CommentComponent({comment,postId,userId,setComments}) {
 

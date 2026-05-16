@@ -10,15 +10,18 @@ import { FaRegComment } from 'react-icons/fa'
 import { FaShare } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa6";
 import { Spinner } from '@heroui/react';
+import PostFooter from '../PostCard/PostFooter';
 
-export default function PostActions({ setNumOfLikes, likesList , setLikesList , post, fetchAllComments , setPosts ,loadingComment}) {
+export default function PostActions({ setNumOfLikes, likesList , setLikesList , post, fetchAllComments , setPosts ,loadingComment,setloadingComment ,comments,setComments,commentBody,setCommentBody}) {
+
     const inputbody = useRef();
     const {profileData} = useContext(AuthContext)
     const [likeloading, setLikeloading] = useState(false)
     const [shareLoading, setShareLoading] = useState(false)
     const [shareBody, setShareBody] = useState("")
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(false);
     async function handleAddLike(postId){
         try {
             setLikeloading(true);
@@ -40,7 +43,7 @@ export default function PostActions({ setNumOfLikes, likesList , setLikesList , 
             const response = await sharePost(postId,formData);
             toast.success(response.data.message);
             const newPost = response.data.data.post;
-            setIsOpen(false)
+            setIsShareOpen(false)
             setPosts((prevPosts) => [newPost, ...prevPosts]);
     
         } catch (error) {
@@ -56,10 +59,68 @@ export default function PostActions({ setNumOfLikes, likesList , setLikesList , 
     return (
         <>
             <div className='actions p-4 flex justify-around items-center'>
-                <button disabled={likeloading} onClick={()=>handleAddLike(post._id)} className='bg-transparent flex items-center gap-2 cursor-pointer'> {likeloading ?  <Spinner size="sm"/> : <AiOutlineLike className={likesList?.includes(profileData.id) ? "text-blue-600" : ""}/> }  {likesList?.includes(profileData.id) ? "Liked" : "Like"}</button>
-                <button onClick={()=>fetchAllComments(post._id)} disabled={loadingComment}  className="bg-transparent flex items-center gap-2 cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed"> <FaRegComment /> {loadingComment ? "loading..."   : "Comment"} </button>
-                <Button onPress={() => setIsOpen(true)} variant="secondary"><FaShare /> Share</Button>
-                <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
+                <button 
+                    disabled={likeloading} 
+                    onClick={()=>handleAddLike(post._id)} 
+                    className='bg-transparent flex items-center gap-2 cursor-pointer'
+                > 
+                        {likeloading ?
+                            <Spinner size="sm"/> 
+                        :   
+                            <AiOutlineLike className={likesList?.includes(profileData.id) ? "text-blue-600" : ""}/> 
+                        }  
+
+                        {likesList?.includes(profileData.id) ?
+                            "Liked" 
+                        :   
+                            "Like"
+                        }
+                </button>
+                
+                <Button 
+                    onClick={() => {
+                        fetchAllComments(post._id);
+                        setIsCommentsOpen(true);
+                    }}
+                    disabled={loadingComment}  
+                    className="bg-transparent flex items-center gap-2 cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed"
+                > 
+                    <FaRegComment /> {loadingComment ? "loading..."   : "Comment"} 
+                </Button>
+
+                <Modal size="2xl"  isOpen={isCommentsOpen} onOpenChange={setIsCommentsOpen}>
+                    <ModalContent >
+                        
+                    
+                        <>
+                        <ModalHeader>Comments</ModalHeader>
+                        <hr className='border-gray-200'/>
+                        <ModalBody>
+
+                            <PostFooter 
+                                userId={post?.user._id} 
+                                postId={post.id} 
+                                comments={comments} 
+                                setComments={setComments}  
+                                setloadingComment={setloadingComment} 
+                                loadingComment={loadingComment}
+                                commentBody={commentBody}
+                                setCommentBody={setCommentBody}
+                                
+                            />
+                        </ModalBody>
+
+                        </>
+                    
+                    </ModalContent>
+                </Modal>
+                
+                
+                
+
+
+                <Button onPress={() => setIsShareOpen(true)} variant="secondary"><FaShare /> Share</Button>
+                <Modal isOpen={isShareOpen} onOpenChange={setIsShareOpen}>
                     <ModalContent>
                     {(onClose) => (
                         <>
