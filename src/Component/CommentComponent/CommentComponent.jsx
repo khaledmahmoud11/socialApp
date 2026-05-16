@@ -2,13 +2,13 @@ import React, { useContext, useRef, useState } from 'react'
 import { AuthContext } from '../../Context/AuthContext';
 import { createReply, DeleteComment, editComment, getAllReplies, likeComment } from '../../services/CommentServices';
 import { toast } from 'react-toastify';
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Input, Spinner} from "@heroui/react";
-import { BsThreeDots } from 'react-icons/bs';
 import { FaImage } from "react-icons/fa6";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { FaHourglassEnd } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import EditOrDeleteCommentBTn from '../EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
+import { Button, Input, Spinner } from '@heroui/react';
 
 export default function CommentComponent({comment,postId,userId,setComments}) {
 
@@ -225,17 +225,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                                             {(comment.commentCreator._id === profileData.id || userId === profileData.id) && 
                                                 <>
                                                     <div>
-                                                        <Dropdown >
-                                                        <DropdownTrigger className='bg-transparent hover:bg-gray-300 transition-all duration-200'>
-                                                            <Button > <BsThreeDots /> </Button>
-                                                        </DropdownTrigger>
-                                                        <DropdownMenu aria-label="Static Actions">
-                                                            { comment.commentCreator._id === profileData.id && <DropdownItem key="edit" className='cursors pointer' onClick={()=>changeInput(comment)} >Edit Comment</DropdownItem>}
-                                                            <DropdownItem key="delete" className="text-danger cursor-pointer" color="danger" onClick={()=>handleDeleteComment( postId , comment._id)} >
-                                                                Delete Comment
-                                                            </DropdownItem>
-                                                        </DropdownMenu>
-                                                    </Dropdown>
+                                                        <EditOrDeleteCommentBTn comment={comment} postId={postId} changeInput={changeInput} handleDeleteComment={handleDeleteComment}/>
                                                     </div>
                                                 </>
                                             }
@@ -316,17 +306,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                                                                         {(reply.commentCreator._id === profileData.id || userId === profileData.id) && 
                                                                             <>
                                                                                 <div>
-                                                                                    <Dropdown >
-                                                                                    <DropdownTrigger className='bg-transparent hover:bg-gray-300 transition-all duration-200'>
-                                                                                        <Button > <BsThreeDots /> </Button>
-                                                                                    </DropdownTrigger>
-                                                                                    <DropdownMenu aria-label="Static Actions">
-                                                                                        { reply.commentCreator._id === profileData.id && <DropdownItem key="edit" className='cursors pointer' onClick={()=>changeInput(reply)} >Edit Comment</DropdownItem>}
-                                                                                        <DropdownItem key="delete" className="text-danger cursor-pointer" color="danger" onClick={()=>handleDeleteComment( postId , reply._id)} >
-                                                                                            Delete Comment
-                                                                                        </DropdownItem>
-                                                                                    </DropdownMenu>
-                                                                                </Dropdown>
+                                                                                    <EditOrDeleteCommentBTn comment={reply} postId={postId} changeInput={changeInput} handleDeleteComment={handleDeleteComment}/>
                                                                                 </div>
                                                                             </>
                                                                         }
