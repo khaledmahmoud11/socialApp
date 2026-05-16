@@ -102,9 +102,17 @@ export default function CreatePost({setPosts}) {
       <hr className='border-gray-300'  />
       <div className='flex justify-between'>
         <div className='flex gap-3 items-center '>
-          <p onClick={()=>handleSelectImage()} className='flex gap-2 items-center cursor-pointer '> <FaImage className='text-green-600' />photo/videos</p>
+
+          <p 
+            onClick={()=>handleSelectImage()} 
+            className='flex gap-2 items-center cursor-pointer '
+          > 
+            <FaImage className='text-green-600' /> <span className='hidden lg:flex'> photo/videos</span>
+          </p>
           <Input onInput={()=>handleUploadImage()} ref={inputPhoto} type='file' className='hidden' />
-          <p className='flex gap-2 items-center '> <MdOutlineEmojiEmotions className='text-yellow-700'  />feelings/activities</p>
+          <p className='flex gap-2 items-center '> <MdOutlineEmojiEmotions className='text-yellow-700'  /> 
+            <span className='hidden lg:flex'> feelings/activities</span>
+          </p>
         </div>
         <div>
           <Button isDisabled={!postContent && !sendingImage} isLoading={isLoading} onClick={()=>fetchCreatePost()} className='p-3 rounded-2xl bg-blue-600 cursor text-white'>Upload</Button>

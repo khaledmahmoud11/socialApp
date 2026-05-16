@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { GoBookmarkSlash } from "react-icons/go";
 
 
-export default function PostHeader({photo , id , name , username ,  privacy , createdAt , userId  , setIsEditing ,bookmarked ,setPosts,activeTab   }) {
+export default function PostHeader({photo , id , name , createdAt , userId  , setIsEditing ,bookmarked ,setPosts,activeTab   }) {
     let {profileData}=useContext(AuthContext);
     const [loadingSave, setLoadingSave] = useState(false);
 
@@ -61,11 +61,11 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
     return (
     <>   
                 <div>
-                    <el-dialog>
-                    <dialog  ref={dialogRef} aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+                    <el-dialog >
+                    <dialog ref={dialogRef} aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
                         <el-dialog-backdrop class="fixed inset-0 bg-gray-900/50 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
 
-                        <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+                        <div abindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
                         <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-gray-800 text-left shadow-md outline -outline-offset-1 outline-white/10 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95">
                             <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <div class="sm:flex sm:items-start">
@@ -106,16 +106,14 @@ export default function PostHeader({photo , id , name , username ,  privacy , cr
                                     <h3 className='font-bold text-sm hover:underline transition-all duration-200 w-fit '> {name} </h3>
                                 </Link>
                                 <div className='flex gap-3'>
-                                    {username && <p className='text-gray-500 text-sm '>{username}</p> }                                
                                     <span className='text-gray-500 text-sm'> {formatPostDate(createdAt)} </span>
-                                    <span className='text-gray-500 text-sm'> {privacy} </span>
                                 </div>
                             </div>
                         </div>
                         
-                            <Dropdown>
+                            <Dropdown >
                                 <DropdownTrigger>
-                                    <Button variant="bordered"> <BsThreeDots /> </Button>
+                                    <Button size="md" isIconOnly variant="bordered"> <BsThreeDots /> </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Static Actions">
                                     <DropdownItem onClick={()=>fetchBookmarkPost(id)} key="edit" className='cursors pointer' >

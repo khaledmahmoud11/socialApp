@@ -24,9 +24,7 @@ export default function Post({post ,setPosts,activeTab}) {
                                 photo={post.user.photo} 
                                 id={post.id} 
                                 name={post.user.name} 
-                                username={post.user.username} 
                                 createdAt={post.createdAt} 
-                                privacy={post.privacy} 
                                 userId={post?.user._id} 
                                 bookmarked={post.bookmarked}   
                         />

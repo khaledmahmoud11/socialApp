@@ -123,12 +123,20 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
         <div className='flex justify-between items-center p-2'>
           <div className='flex items-center gap-2'>
             <span className='bg-blue-600 rounded-full p-1'> <AiOutlineLike className='text-white' /> </span>
-            <p>{numOfLikes} Likes</p>
+            <p className='text-xs sm:text-sm  transition cursor-pointer hover:text-[#1877f2] hover:underline'>{numOfLikes} Likes</p>
           </div>
-          <div className='flex gap-3 items-center'>
-            <span className='flex items-center gap-2 text-sm text-gray-600 '> <FaShare size={12} /> {post.sharesCount} share</span>
-            <button onClick={()=>fetchAllComments(post.id)} disabled={loadingComment}  className="bg-transparent  cursor-pointer flex items-center gap-2 text-sm text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"> {comments.length ===0 ? post.commentsCount  :comments.length }  comments </button>
-            <Link to={`/postDetails/${post.id}`} className='text-blue-600 cursor-pointer text-sm '> View Details</Link>
+          <div className='text-xs sm:text-sm flex gap-2 items-center'>
+            <button 
+              onClick={()=>fetchAllComments(post.id)} 
+              disabled={loadingComment}  
+              className="bg-transparent  cursor-pointer text-xs sm:text-sm flex gap-1 items-center text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"
+            > 
+              {comments.length ===0 ? post.commentsCount  :comments.length }  comments 
+            </button>
+            
+            <span className='text-xs sm:text-sm flex gap-1 items-center text-gray-600 '>  {post.sharesCount} share</span>
+            
+            <Link to={`/postDetails/${post.id}`} className='text-[10px] sm:text-xs rounded-md px-2 py-1  font-bold text-[#1877f2] hover:bg-[#e7f3ff] '> View Details</Link>
           </div>
         </div>
 
