@@ -108,9 +108,6 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
             setisLoadingLiking(null)
         }
     }
-
-
-
     async function handleDeleteComment( postId , commentId ){
         try {
             const response = await DeleteComment( postId , commentId);
@@ -198,6 +195,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
     return (
         <>
             <div key={comment._id} className='py-2 comment' >
+                
                                 <div className='flex gap-3 '>
                                     <img src={comment.commentCreator.photo} alt="" className='w-10 h-10 rounded-full' />
                                     <div className='px-3 py-2 w-full'>

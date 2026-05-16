@@ -28,25 +28,25 @@ import {
   
 } from "@heroui/react";
 import { toast } from 'react-toastify';
-export default function PostBody({ image , body , likesCount , commentsCount , likes , id , sharesCount , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment , name , username ,isShare , sharedPost ,setPosts  }) {
+import CreateComment from '../CreateComment/CreateComment';
+export default function PostBody({post , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment ,setPosts  }) {
   
-  const photoComment = useRef();
+
   const inputbody = useRef();
 
   let {profileData}=useContext(AuthContext)
   
-  const [displayPhoto, setDisplayPhoto] = useState("")
-  const [sendingPhoto, setSendingPhoto] = useState("")
+
   const [commentBody, setCommentBody] = useState("")
-  const [numOfLikes, setNumOfLikes] = useState(likesCount);
-  const [likesList, setLikesList] = useState(likes);
+  const [numOfLikes, setNumOfLikes] = useState(post.likesCount);
+  const [likesList, setLikesList] = useState(post.likes);
 
 
   
   const [commentloading, setCommentloading] = useState(false)
   const [likeloading, setLikeloading] = useState(false)
   const [loadingEdit, setLoadingEdit] = useState(false)
-  const [postBody, setPostBody] = useState(body);
+  const [postBody, setPostBody] = useState(post.body);
 
   const [shareBody, setShareBody] = useState("")
   
@@ -71,17 +71,20 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
         }
     }
 
-  function clickPhotoIcon(){
-    photoComment.current.click();
-  }
-  function selectPhotoComment(){
-    setSendingPhoto(photoComment.current.files[0])
-    setDisplayPhoto(URL.createObjectURL(photoComment.current.files[0]))
-  }
-  function deleteDisplayPhoto(){
-    setSendingPhoto("")
-    setDisplayPhoto("")
-  }
+          const photoComment = useRef();
+          const [displayPhoto, setDisplayPhoto] = useState("")
+          const [sendingPhoto, setSendingPhoto] = useState("")
+          function clickPhotoIcon(){
+                  photoComment.current.click();
+          }
+          function selectPhotoComment(){
+                  setSendingPhoto(photoComment.current.files[0])
+                  setDisplayPhoto(URL.createObjectURL(photoComment.current.files[0]))
+          }
+          function deleteDisplayPhoto(){
+                  setSendingPhoto("")
+                  setDisplayPhoto("")
+          }
 
   async function handleSubmitComment(id){
 
@@ -174,28 +177,28 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
         {isEditing && <div className='w-full text-end my-2 '>
           <>
             <Button className=' font-bold mx-2 ' onClick={()=>setIsEditing(false)} >Cancel</Button>
-            <Button isLoading={loadingEdit} className='bg-blue-600 text-white font-bold' onClick={()=>handleUpdatePost(id)} >Save</Button>
+            <Button isLoading={loadingEdit} className='bg-blue-600 text-white font-bold' onClick={()=>handleUpdatePost(post.id)} >Save</Button>
           </>
         </div> }
-        {isShare && <>
+        {post.isShare && <>
           <div className=' bg-gray-100 border border-gray-300 rounded-xl w-full p-3 my-3 '>
               <div className="flex items-center justify-between ">
                 <div className='flex items-center gap-2'>
-                  <img src={sharedPost?.user.photo} alt="" className='w-10 h-10 rounded-full' />
+                  <img src={post.sharedPost?.user.photo} alt="" className='w-10 h-10 rounded-full' />
                   <div>
-                    <p className='truncate text-sm font-bold text-slate-900 w-20 sm:w-full '>{sharedPost?.user.name}</p>
-                    <p className='truncate text-xs text-slate-500'>@{sharedPost?.user.username}</p>
+                    <p className='truncate text-sm font-bold text-slate-900 w-20 sm:w-full '>{post.sharedPost?.user.name}</p>
+                    <p className='truncate text-xs text-slate-500'>@{post.sharedPost?.user.username}</p>
                   </div>
                 </div>
                 <Link 
-                  to={`/PostDetails/${sharedPost?._id}`} 
+                  to={`/PostDetails/${post.sharedPost?._id}`} 
                   className='flex items-center justify-center gap-1 rounded-lg px-2 py-1 text-xs font-bold text-blue-500 hover:bg-blue-300'>
                     Original Post <RiShareBoxFill />
                 </Link>
               </div>
               <div className="p-3">
-                {sharedPost?.body  && <p className='whitespace-pre-wrap text-sm leading-relaxed text-slate-800'>{sharedPost?.body}</p> }
-                {sharedPost?.image  && <img src={sharedPost?.image} alt="post_img" className='w-full h-100 object-cover' />  }
+                {post.sharedPost?.body  && <p className='whitespace-pre-wrap text-sm leading-relaxed text-slate-800'>{post.sharedPost?.body}</p> }
+                {post.sharedPost?.image  && <img src={post.sharedPost?.image} alt="post_img" className='w-full h-100 object-cover' />  }
               </div>
               
           </div>
@@ -203,21 +206,21 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
           </>
         }
           
-        {image && <img src={image} alt="post_img" className='w-full h-80 object-cover' /> }
+        {post.image && <img src={post.image} alt="post_img" className='w-full h-80 object-cover' /> }
         <div className='flex justify-between items-center p-2'>
           <div className='flex items-center gap-2'>
             <span className='bg-blue-600 rounded-full p-1'> <AiOutlineLike className='text-white' /> </span>
             <p>{numOfLikes} Likes</p>
           </div>
           <div className='flex gap-3 items-center'>
-            <span className='flex items-center gap-2 text-sm text-gray-600 '> <FaShare size={12} /> {sharesCount} share</span>
-            <button onClick={()=>fetchAllComments(id)} disabled={loadingComment}  className="bg-transparent  cursor-pointer flex items-center gap-2 text-sm text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"> {comments.length ===0 ? commentsCount  :comments.length }  comments </button>
-            <Link to={`/postDetails/${id}`} className='text-blue-600 cursor-pointer text-sm '> View Details</Link>
+            <span className='flex items-center gap-2 text-sm text-gray-600 '> <FaShare size={12} /> {post.sharesCount} share</span>
+            <button onClick={()=>fetchAllComments(post.id)} disabled={loadingComment}  className="bg-transparent  cursor-pointer flex items-center gap-2 text-sm text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"> {comments.length ===0 ? post.commentsCount  :comments.length }  comments </button>
+            <Link to={`/postDetails/${post.id}`} className='text-blue-600 cursor-pointer text-sm '> View Details</Link>
           </div>
         </div>
         <div className='actions p-4 flex justify-around items-center'>
-          <button disabled={likeloading} onClick={()=>handleAddLike(id)} className='bg-transparent flex items-center gap-2 cursor-pointer'> {likeloading ?  <Spinner size="sm"/> : <AiOutlineLike className={likesList?.includes(profileData.id) ? "text-blue-600" : ""}/> }  {likesList?.includes(profileData.id) ? "Liked" : "Like"}</button>
-          <button onClick={()=>fetchAllComments(id)} disabled={loadingComment}  className="bg-transparent flex items-center gap-2 cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed"> <FaRegComment /> {loadingComment ? "loading..."   : "Comment"} </button>
+          <button disabled={likeloading} onClick={()=>handleAddLike(post.id)} className='bg-transparent flex items-center gap-2 cursor-pointer'> {likeloading ?  <Spinner size="sm"/> : <AiOutlineLike className={likesList?.includes(profileData.id) ? "text-blue-600" : ""}/> }  {likesList?.includes(profileData.id) ? "Liked" : "Like"}</button>
+          <button onClick={()=>fetchAllComments(post.id)} disabled={loadingComment}  className="bg-transparent flex items-center gap-2 cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed"> <FaRegComment /> {loadingComment ? "loading..."   : "Comment"} </button>
           <Button onPress={() => setIsOpen(true)} variant="secondary"><FaShare /> Share</Button>
           <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
             <ModalContent>
@@ -239,13 +242,13 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
                       <div className='flex items-center gap-2'>
                         <img src={profileData.photo} alt="" className='w-10 h-10 rounded-full' />
                         <div>
-                          <p className='truncate text-sm font-bold text-slate-900'>{name}</p>
-                          <p className='truncate text-xs font-semibold text-slate-500'>{username}</p>
+                          <p className='truncate text-sm font-bold text-slate-900'>{post.user.name}</p>
+                          <p className='truncate text-xs font-semibold text-slate-500'>{post.user.username}</p>
                         </div>
                       </div>
                       <div>
-                        <p>{body}</p>
-                        {image  ? <img src={image} alt='post_image' className='w-full h-50 object-cover'/>  :  <></> }
+                        <p>{post.body}</p>
+                        {post.image  ? <img src={post.image} alt='post_image' className='w-full h-50 object-cover'/>  :  <></> }
 
                       </div>
 
@@ -257,7 +260,7 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
                     <Button onPress={onClose}>Close</Button>
                     <Button 
                       className='bg-blue-500 text-white font-bold flex items-center gap-2 '
-                      onClick={()=>fetchSharePost(id)}
+                      onClick={()=>fetchSharePost(post.id)}
                       >
                         {shareLoading ? <Spinner size='sm' color='text-white'/> : <FaShare /> }  Share
                     </Button>
@@ -273,36 +276,38 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
 
         <div className=' p-4 border-2 border-transparent focus-within:border-2 focus-within:border-gray-300 rounded-xl'>
           <Input
-            placeholder='Write a Comment '
-            className='mb-3'
-            onChange={(e)=>setCommentBody(e.target.value)}
-            value={commentBody}          
-          />
+                    placeholder='Write a Comment '
+                    className='mb-3'
+                    onChange={(e)=>setCommentBody(e.target.value)}
+                    value={commentBody}          
+                />
+                
 
-          <div className='flex justify-between items-center'>
-            <div className='flex items-center gap-3'>
-              <span onClick={()=>clickPhotoIcon()} className='cursor-pointer' > <FaImage /> </span>
-              <Input 
-                type='file' 
-                ref={photoComment} 
-                className='hidden'
-                onInput={()=>selectPhotoComment()}
-              />
-              <span> <MdOutlineEmojiEmotions /> </span>
-            </div>
-            <div>
-              <button disabled={!commentBody && !sendingPhoto} onClick={()=>handleSubmitComment(id)} className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-blue-300 ${!commentloading ? 'text-blue-600 bg-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}> {!commentloading ? <IoSend /> :    <Spinner size='sm' />  }  </button>
-            </div>
-            
-          </div>
-          <div>
-            {displayPhoto  &&  
-              <div className='relative'>
-                <img src={displayPhoto} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />
-                <span onClick={()=>deleteDisplayPhoto()} className='bg-gray-900 rounded-full p-2 text-white absolute top-2.5 right-2.5 cursor-pointer'> <IoCloseSharp /></span>
-              </div> 
-            }
-          </div>   
+                <div className='flex justify-between items-center'>
+                    <div className='flex items-center gap-3'>
+                        <span onClick={()=>clickPhotoIcon()} className='cursor-pointer' > <FaImage /> </span>
+                        <Input 
+                            type='file' 
+                            ref={photoComment} 
+                            className='hidden'
+                            onInput={()=>selectPhotoComment()}
+                        />
+                        <span> <MdOutlineEmojiEmotions /> </span>
+                    </div>
+                    <div>
+                        <button disabled={!commentBody && !sendingPhoto} onClick={()=>handleSubmitComment(post.id)} className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-blue-300 ${!commentloading ? 'text-blue-600 bg-white' : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}> {!commentloading ? <IoSend /> :    <Spinner size='sm' />  }  </button>
+                    </div>
+                </div>
+
+
+                <div>
+                    {displayPhoto  &&  
+                        <div className='relative'>
+                            <img src={displayPhoto} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />
+                            <span onClick={()=>deleteDisplayPhoto()} className='bg-gray-900 rounded-full p-2 text-white absolute top-2.5 right-2.5 cursor-pointer'> <IoCloseSharp /></span>
+                        </div> 
+                        }
+                </div>
         </div>
         
           
