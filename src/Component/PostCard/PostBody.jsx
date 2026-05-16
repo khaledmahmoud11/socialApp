@@ -1,21 +1,18 @@
-import React, { useContext, useRef, useState } from 'react'
-import { AiOutlineLike } from 'react-icons/ai'
+import React, { useRef, useState } from 'react'
 import { BiRepost } from 'react-icons/bi'
-import { FaRegComment } from 'react-icons/fa'
-import { FaSpinner } from "react-icons/fa6";
 import { FaImage } from "react-icons/fa6";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaHourglassEnd } from "react-icons/fa";
-import { Spinner } from '@heroui/react';
 import { FaShare } from "react-icons/fa";
+import { AiOutlineLike } from 'react-icons/ai'
+import { Spinner } from '@heroui/react';
 
 import { Link } from 'react-router'
 import { createComment, getAllComments } from '../../services/CommentServices'
 import { Button, Input } from '@heroui/react';
-import { editPost, sharePost } from '../../services/PostServicies';
-import { createLike } from '../../services/LikeServices';
+import { editPost} from '../../services/PostServicies';
 import { AuthContext } from '../../Context/AuthContext';
 import { RiShareBoxFill } from "react-icons/ri";
 
@@ -29,26 +26,21 @@ import {
 } from "@heroui/react";
 import { toast } from 'react-toastify';
 import CreateComment from '../CreateComment/CreateComment';
+import PostActions from '../PostActions/PostActions';
 export default function PostBody({post , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment ,setPosts  }) {
   
 
-  const inputbody = useRef();
 
-  let {profileData}=useContext(AuthContext)
-  
-
-  const [commentBody, setCommentBody] = useState("")
+  const photoComment = useRef();
   const [numOfLikes, setNumOfLikes] = useState(post.likesCount);
+  const [commentBody, setCommentBody] = useState("")
   const [likesList, setLikesList] = useState(post.likes);
-
-
-  
+  const [displayPhoto, setDisplayPhoto] = useState("")
+  const [sendingPhoto, setSendingPhoto] = useState("")
   const [commentloading, setCommentloading] = useState(false)
-  const [likeloading, setLikeloading] = useState(false)
   const [loadingEdit, setLoadingEdit] = useState(false)
   const [postBody, setPostBody] = useState(post.body);
 
-  const [shareBody, setShareBody] = useState("")
   
   async function handleUpdatePost(id){
         try {
@@ -71,9 +63,6 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
         }
     }
 
-          const photoComment = useRef();
-          const [displayPhoto, setDisplayPhoto] = useState("")
-          const [sendingPhoto, setSendingPhoto] = useState("")
           function clickPhotoIcon(){
                   photoComment.current.click();
           }
@@ -131,43 +120,10 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
 
 
 
-  async function handleAddLike(postId){
-    try {
-      setLikeloading(true);
-      const response = await createLike(postId);
-      console.log(response,"response after like");
-      setNumOfLikes(response.data.data.likesCount);
-      setLikesList(response.data.data.post.likes)
-    } catch (error) {
-      console.log(error)
-    }finally{
-      setLikeloading(false)
-    }
-  }
-
-  const [shareLoading, setShareLoading] = useState(false)
-  async function fetchSharePost(postId){
-      try {
-        setShareLoading(true)
-        const formData = new FormData();
-        formData.append("body",shareBody);
-        const response = await sharePost(postId,formData);
-        toast.success(response.data.message);
-        const newPost = response.data.data.post;
-        setIsOpen(false)
-        setPosts((prevPosts) => [newPost, ...prevPosts]);
-
-      } catch (error) {
-        toast.error(error.response?.data?.message );
-      }finally{
-        setShareLoading(false)
-        setShareBody("");
-        inputbody.current.value = "";
-      }
   
-    }
 
-  const [isOpen, setIsOpen] = useState(false);
+
+
   return (
     <>
       <div className="postBody px-4">
@@ -218,59 +174,16 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
             <Link to={`/postDetails/${post.id}`} className='text-blue-600 cursor-pointer text-sm '> View Details</Link>
           </div>
         </div>
-        <div className='actions p-4 flex justify-around items-center'>
-          <button disabled={likeloading} onClick={()=>handleAddLike(post.id)} className='bg-transparent flex items-center gap-2 cursor-pointer'> {likeloading ?  <Spinner size="sm"/> : <AiOutlineLike className={likesList?.includes(profileData.id) ? "text-blue-600" : ""}/> }  {likesList?.includes(profileData.id) ? "Liked" : "Like"}</button>
-          <button onClick={()=>fetchAllComments(post.id)} disabled={loadingComment}  className="bg-transparent flex items-center gap-2 cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed"> <FaRegComment /> {loadingComment ? "loading..."   : "Comment"} </button>
-          <Button onPress={() => setIsOpen(true)} variant="secondary"><FaShare /> Share</Button>
-          <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
-            <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader>Share Post</ModalHeader>
-                  <hr className='border-gray-200'/>
-                  <ModalBody>
-                    <textarea
-                      value={shareBody}
-                      onChange={(e)=>setShareBody(e.target.value)}   
-                      name="" id=""  
-                      placeholder="Say Something About This..." 
-                      className='resize-none w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[17px] leading-relaxed text-slate-800 outline-none transition focus:border-[#1877f2] focus:bg-white'
-                      ref={inputbody}
-                      >
-                    </textarea>
-                    <div className='p-4 bg-gray-200 border-gray-300 border rounded-xl space-y-3'>
-                      <div className='flex items-center gap-2'>
-                        <img src={profileData.photo} alt="" className='w-10 h-10 rounded-full' />
-                        <div>
-                          <p className='truncate text-sm font-bold text-slate-900'>{post.user.name}</p>
-                          <p className='truncate text-xs font-semibold text-slate-500'>{post.user.username}</p>
-                        </div>
-                      </div>
-                      <div>
-                        <p>{post.body}</p>
-                        {post.image  ? <img src={post.image} alt='post_image' className='w-full h-50 object-cover'/>  :  <></> }
 
-                      </div>
-
-
-                    </div>
-                  </ModalBody>
-
-                  <ModalFooter>
-                    <Button onPress={onClose}>Close</Button>
-                    <Button 
-                      className='bg-blue-500 text-white font-bold flex items-center gap-2 '
-                      onClick={()=>fetchSharePost(post.id)}
-                      >
-                        {shareLoading ? <Spinner size='sm' color='text-white'/> : <FaShare /> }  Share
-                    </Button>
-                    
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
-        </div>
+        <PostActions 
+          setNumOfLikes={setNumOfLikes}  
+          likesList={likesList} 
+          post={post} 
+          fetchAllComments={fetchAllComments}
+          setLikesList={setLikesList}
+          setPosts={setPosts} 
+          loadingComment={loadingComment}
+        />
 
 
 
