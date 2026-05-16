@@ -181,21 +181,21 @@ export default function PostBody({ image , body , likesCount , commentsCount , l
           <div className=' bg-gray-100 border border-gray-300 rounded-xl w-full p-3 my-3 '>
               <div className="flex items-center justify-between ">
                 <div className='flex items-center gap-2'>
-                  <img src={sharedPost.user.photo} alt="" className='w-10 h-10 rounded-full' />
+                  <img src={sharedPost?.user.photo} alt="" className='w-10 h-10 rounded-full' />
                   <div>
-                    <p className='truncate text-sm font-bold text-slate-900 w-20 sm:w-full '>{sharedPost.user.name}</p>
-                    <p className='truncate text-xs text-slate-500'>@{sharedPost.user.username}</p>
+                    <p className='truncate text-sm font-bold text-slate-900 w-20 sm:w-full '>{sharedPost?.user.name}</p>
+                    <p className='truncate text-xs text-slate-500'>@{sharedPost?.user.username}</p>
                   </div>
                 </div>
                 <Link 
-                  to={`/PostDetails/${sharedPost._id}`} 
+                  to={`/PostDetails/${sharedPost?._id}`} 
                   className='flex items-center justify-center gap-1 rounded-lg px-2 py-1 text-xs font-bold text-blue-500 hover:bg-blue-300'>
                     Original Post <RiShareBoxFill />
                 </Link>
               </div>
               <div className="p-3">
-                {sharedPost.body  && <p className='whitespace-pre-wrap text-sm leading-relaxed text-slate-800'>{sharedPost.body}</p> }
-                {sharedPost.image  && <img src={sharedPost.image} alt="post_img" className='w-full h-100 object-cover' />  }
+                {sharedPost?.body  && <p className='whitespace-pre-wrap text-sm leading-relaxed text-slate-800'>{sharedPost?.body}</p> }
+                {sharedPost?.image  && <img src={sharedPost?.image} alt="post_img" className='w-full h-100 object-cover' />  }
               </div>
               
           </div>
