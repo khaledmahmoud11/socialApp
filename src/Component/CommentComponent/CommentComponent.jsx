@@ -9,7 +9,7 @@ import { FaHourglassEnd } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import EditOrDeleteCommentBTn from '../EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
 import { Button, Input, Spinner } from '@heroui/react';
-import CreateComment from '../CreateComment/CreateComment';
+import CreateComment from './CreateComment/CreateComment';
 
 export default function CommentComponent({comment,postId,userId,setComments}) {
 
@@ -272,7 +272,9 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                                                 </div>
                                             
                                                 :
-                                                replies.length===0 ? <p className='text-xs text-slate-500 my-2'> No Replies Yet For This Comment</p> :
+                                                replies.length===0 ? 
+                                                    <p className='text-xs text-slate-500 my-2'> No Replies Yet For This Comment</p> 
+                                                :
                                                 <>
                                                     {replies.map((reply)=>(
                                                         <div key={reply._id} className='py-2 comment' >
