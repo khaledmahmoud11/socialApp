@@ -89,7 +89,6 @@ async function handleUserLogin(data) {
           <Button isLoading={isSubmitting} type='submit' color= {isSubmitting ? "default" : "primary"} className=' bg-blue-800 font-bold text-md w-full '>
             Login
           </Button>
-          <button className='w-full text-sm text-blue-700 text-center hover:underline '>Forget Passowrd?</button>
         </div>
       </form>
     </div>
