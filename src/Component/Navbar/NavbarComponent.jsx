@@ -27,7 +27,7 @@ import { NotificationContext } from '../../Context/Notifications';
 export default function NavbarComponent() {
     const navigate =useNavigate()
     const {count} = useContext(NotificationContext)
-    const {setToken ,profileData}=useContext(AuthContext)
+    const {setToken ,profileData,setProfileData}=useContext(AuthContext)
     const [active, setActive] = useState("/");
 
     const navItems = [
@@ -38,9 +38,10 @@ export default function NavbarComponent() {
     
 
   function handleLogOut(){
-    Cookies.remove('user_token');
+    Cookies.remove('userToken');
     navigate("/login");
     setToken(null);
+    setProfileData(null);
   }
   return (
     <>

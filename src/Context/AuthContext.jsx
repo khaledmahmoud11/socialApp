@@ -15,15 +15,16 @@ export default function AuthContextProvider({children}) {
     const [loading, setLoading] = useState(true);
     
     
-    useEffect(()=>{
+    useEffect(() => {
         const userToken = Cookies.get("userToken");
 
         if (userToken) {
             setToken(userToken);
+            
         } else {
-            setLoading(false);
+            setLoading(false); 
         }
-    },[token])
+    }, []);
 
 
     async function getUserProfile(){
