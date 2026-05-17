@@ -23,7 +23,7 @@ export default function Profile() {
     const [user, setUser] = useState([]);
     const [myPosts, setMyPosts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const {profileData}=useContext(AuthContext)
+    const {profileData,setProfileData}=useContext(AuthContext)
     const {id} = useParams();
     const userId = id ?? profileData?.id;
     async function fetchUserProfile(userId){
@@ -78,6 +78,10 @@ export default function Profile() {
         console.log(response,"response for changeing photo ");
         setDisplayProfileImage("");
         setDisplayProfileImage("");
+        setProfileData((prev) => ({
+            ...prev,
+            photo: displayProfileImage
+        }));
         } catch (error) {
         console.log(error)
         }finally{
@@ -116,7 +120,7 @@ export default function Profile() {
                         <div className='flex flex-col lg:items-center lg:flex-row lg:justify-between w-full  space-y-3'>
                             <div className='flex items-center gap-3'>
                                 <div className='relative'>
-                                    <img src={displayProfileImage || user?.photo} className="rounded-full w-25 h-25 " alt="" />
+                                    <img src={profileData.photo || user?.photo} className="rounded-full w-25 h-25 " alt="" />
                                     {user?.id===profileData.id && <>
                                         <div className="absolute bottom-0 right-0 bg-blue-600 rounded-full p-2 cursor-pointer">
                                             <span onClick={()=>handleChangeProfilePhoto()} > <FaCamera className='text-white' /> </span>

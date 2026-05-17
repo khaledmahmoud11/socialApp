@@ -15,7 +15,6 @@ export default function CreatePost({setPosts}) {
   let {profileData}=useContext(AuthContext)
   const inputPhoto = useRef();
   const inputbody = useRef();
-  const [privacy, setPrivacy] = useState("Public");
   const [sendingImage, setSendingImage] = useState("")
   const [displayImage, setDisplayImage] = useState("")
   const [postContent, setPostContent] = useState("")
@@ -72,19 +71,9 @@ export default function CreatePost({setPosts}) {
         <img src={profileData?.photo} alt="avatar" className='w-12.5 h-12.5 rounded-full ' />
         <div>
           <h3 className='font-bold' >{profileData?.name}</h3>
-          <div className='flex items-center gap-2 text-sm'>
-            <span className="ml-2">
-              {privacy === "Public" && <FaGlobe />}
-              {privacy === "Followers" && <FaUserFriends />}
-              {privacy === "Only Me" && <FaLock />}
-            </span>
-
-            <select onChange={(e) => setPrivacy(e.target.value)} value={privacy}>
-              <option value="Public">Public</option>
-              <option value="Followers">Followers</option>
-              <option value="Only Me">Only Me</option>
-            </select>
-          </div>
+          <p className='text-gray-400 text-sm'>
+            Share your thoughts with the world
+          </p>
         </div>
       </div>
       <div>

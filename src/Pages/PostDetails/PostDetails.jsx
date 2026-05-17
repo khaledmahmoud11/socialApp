@@ -35,7 +35,7 @@ export default function PostDetails() {
         <PostSkeleton />
       :  post?    
         <>
-          <div className='max-w-175 mx-auto'>
+          <div className='max-w-175 mx-auto py-10'>
             
               <Post key={post._id} post={post} />
           </div>
