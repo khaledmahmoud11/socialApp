@@ -29,8 +29,10 @@ import CreateComment from '../CommentComponent/CreateComment/CreateComment';
 export default function PostBody({post , comments  ,setComments , isEditing , setIsEditing , loadingComment , setloadingComment ,setPosts,commentBody,setCommentBody  }) {
   
 
-
+  console.log(post)
   const [numOfLikes, setNumOfLikes] = useState(post.likesCount);
+  const [numOfComments, setNumOfComments] = useState(post.commentsCount);
+  const [numOfShares, setNumOfShares] = useState(post.sharesCount);
   const [likesList, setLikesList] = useState(post.likes);
   const [loadingEdit, setLoadingEdit] = useState(false)
   const [postBody, setPostBody] = useState(post.body);
@@ -56,11 +58,6 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
           
         }
     }
-
-
-
-  
-
   async function fetchAllComments(postId){
     try{
       setloadingComment(true)
@@ -131,10 +128,10 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
               disabled={loadingComment}  
               className="bg-transparent  cursor-pointer text-xs sm:text-sm flex gap-1 items-center text-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"
             > 
-              {comments.length ===0 ? post.commentsCount  :comments.length }  comments 
+              {numOfComments || 0}  comments 
             </button>
             
-            <span className='text-xs sm:text-sm flex gap-1 items-center text-gray-600 '>  {post.sharesCount} share</span>
+            <span className='text-xs sm:text-sm flex gap-1 items-center text-gray-600 '>  {numOfShares || 0} share</span>
             
             <Link to={`/postDetails/${post.id}`} className='text-[10px] sm:text-xs rounded-md px-2 py-1  font-bold text-[#1877f2] hover:bg-[#e7f3ff] '> View Details</Link>
           </div>
@@ -152,7 +149,10 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
           setComments={setComments}  
           setloadingComment={setloadingComment}
           commentBody={commentBody}
-          setCommentBody={setCommentBody} 
+          setCommentBody={setCommentBody}
+          setNumOfShares={setNumOfShares}
+          setNumOfComments={setNumOfComments}
+          
         />
 
 

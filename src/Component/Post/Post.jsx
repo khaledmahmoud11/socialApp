@@ -8,7 +8,7 @@ export default function Post({post ,setPosts,activeTab}) {
         const [comments, setComments] = useState([]);
         const [isEditing, setIsEditing] = useState(false);
         const [loadingComment, setloadingComment] = useState(false);
-          const [commentBody, setCommentBody] = useState("")
+        const [commentBody, setCommentBody] = useState("")
         
 
 

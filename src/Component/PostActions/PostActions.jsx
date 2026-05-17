@@ -12,7 +12,7 @@ import { FaSpinner } from "react-icons/fa6";
 import { Spinner } from '@heroui/react';
 import PostFooter from '../PostCard/PostFooter';
 
-export default function PostActions({ setNumOfLikes, likesList , setLikesList , post, fetchAllComments , setPosts ,loadingComment,setloadingComment ,comments,setComments,commentBody,setCommentBody}) {
+export default function PostActions({ setNumOfLikes , setNumOfComments,setNumOfShares, likesList , setLikesList , post, fetchAllComments , setPosts ,loadingComment,setloadingComment ,comments,setComments,commentBody,setCommentBody}) {
 
     const inputbody = useRef();
     const {profileData} = useContext(AuthContext)
@@ -45,6 +45,7 @@ export default function PostActions({ setNumOfLikes, likesList , setLikesList , 
             const newPost = response.data.data.post;
             setIsShareOpen(false)
             setPosts((prevPosts) => [newPost, ...prevPosts]);
+            setNumOfShares((prevCount) => (prevCount || 0) + 1);
     
         } catch (error) {
             toast.error(error.response?.data?.message );
@@ -106,6 +107,7 @@ export default function PostActions({ setNumOfLikes, likesList , setLikesList , 
                                 loadingComment={loadingComment}
                                 commentBody={commentBody}
                                 setCommentBody={setCommentBody}
+                                setNumOfComments={setNumOfComments}
                                 
                             />
                         </ModalBody>

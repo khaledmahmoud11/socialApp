@@ -11,7 +11,7 @@ import { Button, Input, Spinner } from '@heroui/react';
 import CreateComment from './CreateComment/CreateComment';
 import EditOrDeleteCommentBTn from './EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
 
-export default function CommentComponent({comment,postId,userId,setComments}) {
+export default function CommentComponent({comment,postId,userId,setComments,setNumOfComments}) {
     console.log(comment,"response of comemnt")
     let {profileData}=useContext(AuthContext)
     const [replayStatement, setreplayStatement] = useState(null);
@@ -131,6 +131,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                 setReplies(prev => prev.filter(c => c._id !== commentId));
             }else{
                 setComments(prev => prev.filter(c => c._id !== commentId));
+                setNumOfComments((prevCount) => (prevCount || 0) - 1);
             }
             
         } catch (error) {
