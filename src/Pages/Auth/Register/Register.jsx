@@ -25,7 +25,7 @@ import { LuUsers } from "react-icons/lu";
 import { CiCalendar } from "react-icons/ci";
 import { IoKeyOutline } from "react-icons/io5";
 import { AuthContext } from '../../../Context/AuthContext.jsx';
-
+import Cookies from "js-cookie";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
@@ -52,6 +52,10 @@ export default function Register() {
     const response = await userRegister(data);
     toast.success(response.data.message)
     localStorage.setItem("userToken",response.data.data.token);
+    Cookies.set("userToken", response.data.data.token, {
+            expires: 7,
+            sameSite: "strict"
+        });
     setToken(response.data.data.token);
   } catch (error) {
     toast.error(error.response.data.message)
