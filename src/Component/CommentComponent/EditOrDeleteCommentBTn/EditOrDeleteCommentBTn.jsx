@@ -5,7 +5,7 @@ import { AuthContext } from '../../../Context/AuthContext';
 
 
 
-export default function EditOrDeleteCommentBTn({comment,postId,changeInput,handleDeleteComment}) {
+export default function EditOrDeleteCommentBTn({comment,postId,changeInput,handleDeleteComment,parentCommentId = null}) {
     let {profileData}=useContext(AuthContext)
     return (
         <>
@@ -18,7 +18,7 @@ export default function EditOrDeleteCommentBTn({comment,postId,changeInput,handl
                     <DropdownItem 
                         key="delete" 
                         className="text-danger cursor-pointer" color="danger" 
-                        onClick={()=>handleDeleteComment( postId , comment._id)}
+                        onClick={()=>handleDeleteComment( postId , comment._id,parentCommentId)}
                     >
                         Delete Comment
                     </DropdownItem>

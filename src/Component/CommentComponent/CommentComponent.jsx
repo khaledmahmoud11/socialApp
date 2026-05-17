@@ -12,7 +12,7 @@ import CreateComment from './CreateComment/CreateComment';
 import EditOrDeleteCommentBTn from './EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
 
 export default function CommentComponent({comment,postId,userId,setComments}) {
-
+    console.log(comment,"response of comemnt")
     let {profileData}=useContext(AuthContext)
     const [replayStatement, setreplayStatement] = useState(null);
     const [replyBody, setReplyBody] = useState("")
@@ -22,6 +22,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
 
 
     const [replyloading, setReplyloading] = useState(false)
+    const [submitReplayLoading, setsubmitReplayLoading] = useState(false)
 
     const [replies, setReplies] = useState([])
 
@@ -42,34 +43,39 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
         image,
         reset
     }) {
-
         try {
-
+            setsubmitReplayLoading(true);
             const formData = new FormData();
-
             if (text) {
                 formData.append("content", text)
             }
-
             if (image) {
                 formData.append("image", image)
             }
-
             const response = await createReply(
                 postId,
                 commentID,
                 formData
             )
-
             setReplies(prev => [
                 response.data.data.reply,
                 ...prev
             ])
+            setComments(prevComments => 
+                prevComments.map(comment => 
+                    comment._id === commentID 
+                        ? { ...comment, repliesCount: (comment.repliesCount || 0) + 1 }
+                        : comment
+                )
+            );
+            
 
             reset()
 
         } catch (error) {
             console.log(error)
+        }finally{
+            setsubmitReplayLoading(false);
         }
     }
     async function handleLikeReply(postId,commentID){
@@ -110,13 +116,23 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
             setisLoadingLiking(null)
         }
     }
-    async function handleDeleteComment( postId , commentId ){
+    async function handleDeleteComment( postId , commentId ,parentCommentId = null ){
         try {
             const response = await DeleteComment( postId , commentId);
-            setComments(prev => prev.filter(c => c._id !== commentId));
-            setReplies(prev => prev.filter(c => c._id !== commentId));
-
-            toast.success(response.data.message)
+            toast.success(response.data.message);
+            if(parentCommentId){
+                setComments(prevComments => 
+                    prevComments.map(comment => 
+                        comment._id === parentCommentId 
+                            ? { ...comment, repliesCount: Math.max(0, (comment.repliesCount || 0) - 1) }
+                            : comment
+                    )
+                );
+                setReplies(prev => prev.filter(c => c._id !== commentId));
+            }else{
+                setComments(prev => prev.filter(c => c._id !== commentId));
+            }
+            
         } catch (error) {
             console.log(error)
         }
@@ -305,7 +321,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                                                                         {(reply.commentCreator._id === profileData.id || userId === profileData.id) && 
                                                                             <>
                                                                                 <div>
-                                                                                    <EditOrDeleteCommentBTn comment={reply} postId={postId} changeInput={changeInput} handleDeleteComment={handleDeleteComment}/>
+                                                                                    <EditOrDeleteCommentBTn comment={reply} parentCommentId={comment._id} postId={postId} changeInput={changeInput} handleDeleteComment={handleDeleteComment}/>
                                                                                 </div>
                                                                             </>
                                                                         }
@@ -347,7 +363,7 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
                                                         value={replyBody}
                                                         setValue={setReplyBody}
                                                         placeholder="Write a Reply"
-                                                        loading={replyloading}
+                                                        loading={submitReplayLoading}
                                                         wrapperClass="bg-gray-300"
                                                         onSubmit={(data) =>
                                                             handleSubmitReply(postId, comment._id, data)
@@ -363,3 +379,8 @@ export default function CommentComponent({comment,postId,userId,setComments}) {
         </>
     )
 }
+
+
+
+
+
