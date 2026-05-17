@@ -51,26 +51,30 @@ export default function SuggestionCard({suggestion}) {
                                     <p className='text-gray-500 text-sm'>{suggestion.username}</p>
                                 </div>
                         </div>
-                        <Button
+                        <button
                             onClick={() => handleFollowUser(suggestion._id)}
-                            className={`${profileData.following?.includes(suggestion._id) ? "bg-green-50 hover:bg-green-100 text-green-600  "   : "bg-blue-50 hover:bg-blue-100 text-blue-600 " }   cursor-pointer text-sm font-bold rounded-xl p-2 flex items-center gap-2`}
+                            className={`${profileData.following?.includes(suggestion._id) ? " bg-green-50 hover:bg-green-100 text-green-600  "   : "bg-blue-50 hover:bg-blue-100 text-blue-600 " }   w-fit cursor-pointer text-sm font-bold rounded-xl p-2 flex items-center gap-2`}
                             disabled={followLoading === suggestion._id}
                         >
-                        {followLoading === suggestion._id ?
-                            <Spinner size="sm" /> 
-                        : profileData.following?.includes(suggestion._id) ?
-                            <FaUserCheck/> 
-                        :
-                            <IoPersonAdd/>
-                        }
-                        {
-                            followLoading === suggestion._id
-                                ? "Updating..."
-                                : profileData.following?.includes(suggestion._id)
+                            {followLoading === suggestion._id ?
+                                <Spinner size="sm" /> 
+                            : profileData.following?.includes(suggestion._id) ?
+                                <FaUserCheck/> 
+                            :
+                                <IoPersonAdd/>
+                            }
+                            
+                            <span className='hidden xl:block'>
+                                {    followLoading === suggestion._id
+                                ?
+                                    "Updating..."
+                                    : profileData.following?.includes(suggestion._id)
                                     ? "Following"
                                     : "Follow"
-                        }
-                        </Button>
+                                }
+                            </span>
+                        
+                        </button>
                             </div>
                         <div className='flex gap-3'>
                             <span className='text-gray-500 text-sm' >{suggestion.followersCount} followers</span>

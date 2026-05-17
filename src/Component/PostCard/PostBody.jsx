@@ -119,7 +119,7 @@ export default function PostBody({post , comments  ,setComments , isEditing , se
           </>
         }
           
-        {post.image && <img src={post.image} alt="post_img" className='w-full h-80 object-cover' /> }
+        {post.image && <img src={post.image} alt="post_img" className='w-full  object-cover' /> }
         <div className='flex justify-between items-center p-2'>
           <div className='flex items-center gap-2'>
             <span className='bg-blue-600 rounded-full p-1'> <AiOutlineLike className='text-white' /> </span>

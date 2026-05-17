@@ -118,7 +118,7 @@ export default function NewsFeed() {
           
         </>}
         
-        <div className="">
+        <div >
           <div className='grid grid-cols-4 gap-8 relative '>
 
             <div className='left-side col-span-4 order-1 lg:order-1 lg:col-span-1 lg:sticky lg:top-17.5 self-start  '>
