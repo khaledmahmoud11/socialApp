@@ -102,7 +102,7 @@ export default function Profile() {
 
     return (
     <>
-        <div className='container mx-auto'>
+        <div className='container mx-auto px-4'>
             <div className="profileInfo rounded-xl my-4" >
                 <div className='w-full h-50 rounded-xl ' >
                     {user?.cover ?
