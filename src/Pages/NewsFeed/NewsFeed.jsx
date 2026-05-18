@@ -20,7 +20,7 @@ export default function NewsFeed() {
   const [isLaodingSuggestion, setIsLaodingSuggestion] = useState(false)
 
 
-  const [activeTab, setActiveTab] = useState("feed");
+  const [activeTab, setActiveTab] = useState("community");
   async function fetchAllPosts(){
     try {
       setAllPostLoading(true);

@@ -14,6 +14,15 @@ export default function SideTaps({activeTab, setActiveTab ,fetchAllPosts,fetchHo
 
     const tabs = [
         {
+            key: "community",
+            label: "Community",
+            icon: <LuEarth />,
+            onClick: () => {
+                setCallbackFunction(() => fetchAllPosts);
+                fetchAllPosts();
+            },
+        },
+        {
             key: "feed",
             label: "Feed",
             icon: <LuNewspaper />,
@@ -31,15 +40,6 @@ export default function SideTaps({activeTab, setActiveTab ,fetchAllPosts,fetchHo
 
                 setCallbackFunction(() => fn);
                 fn();
-            },
-        },
-        {
-            key: "community",
-            label: "Community",
-            icon: <LuEarth />,
-            onClick: () => {
-                setCallbackFunction(() => fetchAllPosts);
-                fetchAllPosts();
             },
         },
         {

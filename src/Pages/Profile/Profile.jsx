@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import coverPhoto from "../../assets/app_photos/pexels-pixabay-207130.jpg"
 import { MdAlternateEmail } from "react-icons/md";
 import { FiUsers } from "react-icons/fi";
 import { CiMail } from "react-icons/ci";
@@ -106,7 +105,7 @@ export default function Profile() {
             <div className="profileInfo rounded-xl my-4" >
                 <div className='w-full h-50 rounded-xl ' >
                     {user?.cover ?
-                        <img src={user?.cover || coverPhoto} className=' rounded-xl w-full h-full object-cover' alt="cover_Photo" />
+                        <img src={user?.cover} className=' rounded-xl w-full h-full object-cover' alt="cover_Photo" />
                         : 
                             <div className='rounded-t-xl group/cover relative h-44 sm:h-52 lg:h-60 overflow-hidden bg-[linear-gradient(112deg,#0f172a_0%,#1e3a5f_36%,#2b5178_72%,#5f8fb8_100%)]'>
                             </div>
@@ -120,7 +119,7 @@ export default function Profile() {
                         <div className='flex flex-col lg:items-center lg:flex-row lg:justify-between w-full  space-y-3'>
                             <div className='flex items-center gap-3'>
                                 <div className='relative'>
-                                    <img src={profileData.photo || user?.photo} className="rounded-full w-25 h-25 " alt="" />
+                                    <img src={user?.photo} className="rounded-full w-25 h-25 " alt="" />
                                     {user?.id===profileData.id && <>
                                         <div className="absolute bottom-0 right-0 bg-blue-600 rounded-full p-2 cursor-pointer">
                                             <span onClick={()=>handleChangeProfilePhoto()} > <FaCamera className='text-white' /> </span>
