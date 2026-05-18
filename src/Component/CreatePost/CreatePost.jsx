@@ -77,7 +77,14 @@ export default function CreatePost({setPosts}) {
         </div>
       </div>
       <div>
-        <textarea ref={inputbody} onChange={(e)=>setPostContent(e.target.value)} name="" id="" placeholder={`what's on your mind , ${profileData?.name}`} className='w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[17px] leading-relaxed text-slate-800 outline-none transition focus:border-[#1877f2] focus:bg-white'></textarea>
+        <textarea
+          ref={inputbody} 
+          onChange={(e)=>setPostContent(e.target.value)} 
+          placeholder={`what's on your mind , ${profileData?.name}`} 
+          className='w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[17px] leading-relaxed text-slate-800 outline-none transition focus:border-[#1877f2] focus:bg-white'
+          >
+            
+          </textarea>
       </div>
       <div className='relative'>
         {displayImage && <>

@@ -10,8 +10,8 @@ export default function EditOrDeleteCommentBTn({comment,postId,changeInput,handl
     return (
         <>
             <Dropdown >
-                <DropdownTrigger className='bg-transparent hover:bg-gray-300 transition-all duration-200'>
-                    <Button > <BsThreeDots /> </Button>
+                <DropdownTrigger className=' hover:bg-gray-300 transition-all duration-200'>
+                    <Button className="p-0" size="sm" isIconOnly variant="bordered "> <BsThreeDots /> </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
                     { comment.commentCreator._id === profileData.id && <DropdownItem key="edit" className='cursors pointer' onClick={()=>changeInput(comment)} >Edit Comment</DropdownItem>}

@@ -113,7 +113,7 @@ export default function PostHeader({photo , id , name , createdAt , userId  , se
                         
                             <Dropdown >
                                 <DropdownTrigger>
-                                    <Button size="md" isIconOnly variant="bordered"> <BsThreeDots /> </Button>
+                                    <Button size="sm" isIconOnly variant="bordered"> <BsThreeDots /> </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Static Actions">
                                     <DropdownItem onClick={()=>fetchBookmarkPost(id)} key="edit" className='cursors pointer' >

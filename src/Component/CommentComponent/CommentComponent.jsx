@@ -10,6 +10,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { Button, Input, Spinner } from '@heroui/react';
 import CreateComment from './CreateComment/CreateComment';
 import EditOrDeleteCommentBTn from './EditOrDeleteCommentBTn/EditOrDeleteCommentBTn';
+import { IoIosSend } from 'react-icons/io';
 
 export default function CommentComponent({comment,postId,userId,setComments,setNumOfComments}) {
     console.log(comment,"response of comemnt")
@@ -212,24 +213,42 @@ export default function CommentComponent({comment,postId,userId,setComments,setN
         <>
             <div key={comment._id} className='py-2 comment' >
                 
-                                <div className='flex gap-3 '>
+                                <div className='flex  gap-2 '>
                                     <img src={comment.commentCreator.photo} alt="" className='w-10 h-10 rounded-full' />
-                                    <div className='px-3 py-2 w-full'>
+                                    <div className='w-full'>
+                                        <div className="flex gap-1">
 
-                                        <div className="flex gap-3">
-
-                                            <div className='px-3 rounded-lg  py-2 bg-gray-200 shadow  min-w-28.5 max-w-fit'>
+                                            <div className={`px-3 rounded-lg  py-2 shadow min-w-28.5  ${editCommentId === comment._id ? "w-full" : "max-w-fit" } `}>
                                                 <h3 className='text-sm font-bold'>{comment.commentCreator.name}</h3>
                                                 {editCommentId === comment._id ? <>
-                                                    <div className='flex items-center gap-2'>
-                                                        <Input className='border-2 border-gray-300 rounded-xl' type="text" value={newContent} onChange={(e)=>setNewContent(e.target.value)} />
-                                                        <Button isLoading={laodingChange} onClick={()=>handleEditComment(postId,comment._id)} className='bg-blue-600 text-white font-bold'>save</Button>
-                                                        <Button onClick={()=>handleCancelEditing()} >cancel</Button>
+                                                    <div className='w-full  space-y-2 border-1 border-blue-200 rounded-xl p-2'>
+                                                        <textarea 
+                                                            className='w-full resize-none py-1 px-2 rounded-lg focus:outline-0' 
+                                                            type="text" 
+                                                            value={newContent} 
+                                                            onChange={(e)=>setNewContent(e.target.value)} 
+                                                        />
+                                                        <div className="flex items-center justify-between">
+                                                            
+                                                            <button 
+                                                                isLoading={laodingChange} 
+                                                                onClick={()=>handleEditComment(postId,comment._id)} 
+                                                                className={`flex items-center justify-center bg-blue-400 rounded-full h-7 w-7 text-white font-bold cursor-pointer ms-auto ${laodingChange && "opacity-50"}`}
+                                                            >
+                                                                {laodingChange ? <Spinner size='sm' color='text-white'/> :  <IoIosSend />}
+                                                            </button>
+                                                        </div>
                                                     </div>
+                                                    <button 
+                                                        onClick={()=>handleCancelEditing()} 
+                                                        className='text-sm text-blue-500 hover:cursor-pointer hover:underline' 
+                                                    >
+                                                        cancel
+                                                    </button>
                                                 
                                                     </>   
                                                 : 
-                                                    <div>
+                                                    <div className='max-w-fit  '>
                                                         { comment.content && <p className='text-sm text-gray-700' >{comment.content}</p>}
                                                         { comment.image && <img src={comment.image} alt='commentPhoto' className='w-full h-50 object-cover rounded-xl' />}
                                                 
@@ -246,39 +265,45 @@ export default function CommentComponent({comment,postId,userId,setComments,setN
 
                                         </div>
                                         
-                                        <div className='flex justify-between items-center w-full'>
-                                            <div className="flex items-center gap-3 my-3">
-                                                <p className='text-gray-400 text-sm '> {formatDate(comment.createdAt)} </p>
-                                                <button 
-                                                    onClick={()=>handleLikeComment(postId, comment._id)} 
-                                                    className={`transition-all duration-200 cursor-pointer hover:underline flex items-center gap-1 ${
-                                                        comment.likes.includes(profileData._id)
-                                                        ? 'text-blue-500 font-semibold'
-                                                        : 'text-gray-500 hover:text-blue-400'
-                                                        }`}
-                                                >
-                                                    {isLoadingLiking === comment._id  ?
-                                                        "...Liking"
+                                        { editCommentId !== comment._id  &&  <>
+                                        
+                                            <div className='flex justify-between items-center w-full'>
+                                                <div className="flex items-center gap-3 my-3 flex-row text-xs text-gray-400 font-semibold">
+                                                    <p className=''> {formatDate(comment.createdAt)} </p>
+                                                    <button 
+                                                        onClick={()=>handleLikeComment(postId, comment._id)} 
+                                                        className={`transition-all duration-200 cursor-pointer hover:underline flex items-center gap-1 ${
+                                                            comment.likes.includes(profileData._id)
+                                                            ? 'text-blue-500 font-semibold'
+                                                            : ' hover:text-blue-400'
+                                                            }`}
+                                                    >
+                                                        {isLoadingLiking === comment._id  ?
+                                                            "...Liking"
+                                                        :
+                                                            comment.likes.includes(profileData._id) 
+                                                            ? 'Liked' : 'Like' 
+                                                        }
+                                                        ({comment.likes.length})
+                                                    </button>
+                                                    {replayStatement === comment._id ?
+                                                        <button onClick={()=>setreplayStatement(null)} className='hover:underline cursor-pointer text-blue-600'>hide Replies</button>
                                                     :
-                                                        comment.likes.includes(profileData._id) 
-                                                        ? 'Liked' : 'Like' 
-                                                    }
-                                                    ({comment.likes.length})
-                                                </button>
-                                                {replayStatement === comment._id ?
-                                                    <button onClick={()=>setreplayStatement(null)} className='hover:underline cursor-pointer text-blue-600'>hide Replies</button>
-                                                :
-                                                    <button onClick={() => {
-                                                        setreplayStatement(comment._id);
-                                                        fetchAllReplies(postId, comment._id);
-                                                    }} className='hover:underline cursor-pointer '>
-                                                        reply ({comment.repliesCount ? comment.repliesCount : 0})
+                                                        <button 
+                                                            onClick={() => {
+                                                                setreplayStatement(comment._id);
+                                                                fetchAllReplies(postId, comment._id);
+                                                            }} 
+                                                            className='hover:underline hover:text-blue-400 cursor-pointer '
+                                                        >
+                                                            reply ({comment.repliesCount ? comment.repliesCount : 0})
                                                         </button>
-                                                }
-                                            </div>
-                                            
+                                                    }
+                                                </div>
+                                                
 
-                                        </div>
+                                            </div>
+                                        </>}
                                         {replayStatement === comment._id && <>
 
                                             {replyloading ? 
